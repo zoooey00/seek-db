@@ -1,0 +1,68 @@
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL('ai_enh_complete','{"type": "completion", "model_name": "arbitrary-model"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL_ENDPOINT('ai_enh_complete_ep','{"ai_model_name": "ai_enh_complete", "url": "http://127.0.0.1:8000/v1/chat/completions", "access_key": "test-only", "provider": "openai", "request_model_name": "request-override"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL('ai_enh_embed','{"type": "dense_embedding", "model_name": "arbitrary-model"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL_ENDPOINT('ai_enh_embed_ep','{"ai_model_name": "ai_enh_embed", "url": "http://127.0.0.1:8000/v1/embeddings", "access_key": "test-only", "provider": "openai", "request_model_name": "request-override"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL('ai_enh_rerank','{"type": "rerank", "model_name": "arbitrary-model"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL_ENDPOINT('ai_enh_rerank_ep','{"ai_model_name": "ai_enh_rerank", "url": "http://127.0.0.1:8000/v1/rerank", "access_key": "test-only", "provider": "siliconflow", "request_model_name": "request-override"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL('ai_enh_ollama','{"type": "completion", "model_name": "arbitrary-model"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL_ENDPOINT('ai_enh_ollama_ep','{"ai_model_name": "ai_enh_ollama", "url": "http://127.0.0.1:8000/api/generate", "access_key": "", "provider": "oLlAmA", "request_model_name": "request-override"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL('ai_enh_ollama_embed','{"type": "dense_embedding", "model_name": "arbitrary-model"}');
+CALL DBMS_AI_SERVICE.CREATE_AI_MODEL_ENDPOINT('ai_enh_ollama_embed_ep','{"ai_model_name": "ai_enh_ollama_embed", "url": "http://127.0.0.1:8000/api/embed", "access_key": "", "provider": "OLLAMA", "request_model_name": "request-override"}');
+SELECT 1 AS ready;
+ready
+1
+SELECT JSON_TYPE(JSON_EXTRACT(AI_PROMPT('{0}',JSON_ARRAY(1,2)),'$.args[0]')) AS argument_type;
+argument_type
+ARRAY
+SELECT JSON_TYPE(JSON_EXTRACT(AI_PROMPT('{0}',JSON_OBJECT('key','value')),'$.args[0]')) AS argument_type;
+argument_type
+OBJECT
+DROP TABLE IF EXISTS ai_enh_input;
+CREATE TABLE ai_enh_input(id INT PRIMARY KEY, content LONGTEXT);
+INSERT INTO ai_enh_input VALUES (0,NULL),(1,'hello'),(2,'世界');
+SELECT id, JSON_LENGTH(AI_EMBED('ai_enh_embed',content,4)) AS dimension FROM ai_enh_input ORDER BY id;
+id	dimension
+0	NULL
+1	4
+2	4
+SELECT id, AI_EMBED('ai_enh_embed',content,3) IS NULL AS null_result FROM ai_enh_input WHERE id>0 ORDER BY id LIMIT 1;
+id	null_result
+1	0
+SELECT CHAR_LENGTH(AI_COMPLETE('ai_enh_complete','hello',NULL))>0 AS nonempty;
+nonempty
+1
+SELECT CHAR_LENGTH(AI_COMPLETE('ai_enh_complete','hello',JSON_OBJECT('temperature',0.25,'max_tokens',7)))>0 AS nonempty;
+nonempty
+1
+SELECT CHAR_LENGTH(AI_COMPLETE('ai_enh_complete',AI_PROMPT('{0}/{0}/{0}','你好世界')))>0 AS nonempty;
+nonempty
+1
+SELECT CHAR_LENGTH(AI_COMPLETE('ai_enh_complete',AI_PROMPT('outer {0}',AI_PROMPT('inner {0}','ok'))))>0 AS nonempty;
+nonempty
+1
+SELECT CHAR_LENGTH(AI_COMPLETE('ai_enh_complete',AI_PROMPT('{0}',JSON_ARRAY(1,2))))>0 AS nonempty;
+nonempty
+1
+SELECT CHAR_LENGTH(AI_COMPLETE('ai_enh_ollama','hello'))>0 AS nonempty;
+nonempty
+1
+SELECT JSON_LENGTH(AI_EMBED('ai_enh_ollama_embed','hello',5)) AS dimension;
+dimension
+5
+SELECT JSON_EXTRACT(AI_RERANK('ai_enh_rerank','query','["doc-0", "doc-1", "doc-2", "doc-3", "doc-4", "doc-5", "doc-6", "doc-7", "doc-8", "doc-9", "doc-10", "doc-11", "doc-12", "doc-13", "doc-14", "doc-15", "doc-16", "doc-17", "doc-18", "doc-19", "doc-20", "doc-21", "doc-22", "doc-23", "doc-24", "doc-25", "doc-26", "doc-27", "doc-28", "doc-29", "doc-30", "doc-31", "doc-32", "doc-33", "doc-34", "doc-35", "doc-36", "doc-37", "doc-38", "doc-39", "doc-40", "doc-41", "doc-42", "doc-43", "doc-44"]'),'$[*].index') AS ranked_indices;
+ranked_indices
+[2, 9, 12, 19, 21, 28, 30, 37, 1, 8, 11, 18, 20, 27, 36, 0, 7, 10, 17, 26, 35, 44, 6, 16, 25, 34, 43, 5, 15, 24, 33, 42, 4, 14, 23, 32, 39, 41, 3, 13, 22, 29, 31, 38, 40]
+SELECT JSON_EXTRACT(AI_RERANK('ai_enh_rerank','query','[{"id": "original-0", "text": "doc-0"}, {"id": "original-1", "text": "doc-1"}, {"id": "original-2", "text": "doc-2"}, {"id": "original-3", "text": "doc-3"}, {"id": "original-4", "text": "doc-4"}, {"id": "original-5", "text": "doc-5"}, {"id": "original-6", "text": "doc-6"}, {"id": "original-7", "text": "doc-7"}, {"id": "original-8", "text": "doc-8"}, {"id": "original-9", "text": "doc-9"}, {"id": "original-10", "text": "doc-10"}, {"id": "original-11", "text": "doc-11"}, {"id": "original-12", "text": "doc-12"}, {"id": "original-13", "text": "doc-13"}, {"id": "original-14", "text": "doc-14"}, {"id": "original-15", "text": "doc-15"}, {"id": "original-16", "text": "doc-16"}, {"id": "original-17", "text": "doc-17"}, {"id": "original-18", "text": "doc-18"}, {"id": "original-19", "text": "doc-19"}, {"id": "original-20", "text": "doc-20"}, {"id": "original-21", "text": "doc-21"}, {"id": "original-22", "text": "doc-22"}, {"id": "original-23", "text": "doc-23"}, {"id": "original-24", "text": "doc-24"}, {"id": "original-25", "text": "doc-25"}, {"id": "original-26", "text": "doc-26"}, {"id": "original-27", "text": "doc-27"}, {"id": "original-28", "text": "doc-28"}, {"id": "original-29", "text": "doc-29"}, {"id": "original-30", "text": "doc-30"}, {"id": "original-31", "text": "doc-31"}, {"id": "original-32", "text": "doc-32"}, {"id": "original-33", "text": "doc-33"}, {"id": "original-34", "text": "doc-34"}, {"id": "original-35", "text": "doc-35"}, {"id": "original-36", "text": "doc-36"}, {"id": "original-37", "text": "doc-37"}, {"id": "original-38", "text": "doc-38"}, {"id": "original-39", "text": "doc-39"}, {"id": "original-40", "text": "doc-40"}, {"id": "original-41", "text": "doc-41"}, {"id": "original-42", "text": "doc-42"}, {"id": "original-43", "text": "doc-43"}, {"id": "original-44", "text": "doc-44"}]','text'),'$[*].id') AS ranked_ids;
+ranked_ids
+["original-2", "original-9", "original-12", "original-19", "original-21", "original-28", "original-30", "original-37", "original-1", "original-8", "original-11", "original-18", "original-20", "original-27", "original-36", "original-0", "original-7", "original-10", "original-17", "original-26", "original-35", "original-44", "original-6", "original-16", "original-25", "original-34", "original-43", "original-5", "original-15", "original-24", "original-33", "original-42", "original-4", "original-14", "original-23", "original-32", "original-39", "original-41", "original-3", "original-13", "original-22", "original-29", "original-31", "original-38", "original-40"]
+DROP TABLE ai_enh_input;
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL_ENDPOINT('ai_enh_complete_ep');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL('ai_enh_complete');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL_ENDPOINT('ai_enh_embed_ep');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL('ai_enh_embed');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL_ENDPOINT('ai_enh_rerank_ep');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL('ai_enh_rerank');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL_ENDPOINT('ai_enh_ollama_ep');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL('ai_enh_ollama');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL_ENDPOINT('ai_enh_ollama_embed_ep');
+CALL DBMS_AI_SERVICE.DROP_AI_MODEL('ai_enh_ollama_embed');
