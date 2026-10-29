@@ -9,6 +9,7 @@ arch=x86_64
 repo=http://mirrors.oceanbase.com/oceanbase/community/stable/al/8/x86_64/
 
 [deps]
+devdeps-apache-arrow-9.0.0-652025071010.al8.x86_64.rpm
 devdeps-gtest-1.8.0-242026020914.al8.x86_64.rpm
 devdeps-libcurl-static-8.12.1-132025040210.al8.x86_64.rpm
 devdeps-libunwind-static-1.6.2-402025072120.al8.x86_64.rpm

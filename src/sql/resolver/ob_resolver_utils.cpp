@@ -23,6 +23,7 @@
 #include "sql/engine/cmd/ob_load_data_parser.h"
 #include "sql/resolver/cmd/ob_load_data_stmt.h"
 #include "sql/resolver/ob_resolver_utils.h"
+#include "sql/resolver/dml/file_sql_resolver.h"
 #include "sql/code_generator/ob_column_index_provider.h"
 #include "query/resolver/ob_partition_type_policy.h"
 #include "sql/resolver/cmd/ob_load_data_stmt.h"
@@ -121,6 +122,23 @@ int ObResolverUtils::get_all_function_table_column_names(const TableItem &table_
                                                          ObIArray<ObString> &column_names)
 {
   int ret = OB_SUCCESS;
+  if (is_file_sql_expr(table_item.function_table_expr_)) {
+    file_sql::Spec spec;
+    std::string error;
+    const ObString encoded = static_cast<const ObConstRawExpr *>(table_item.function_table_expr_)->get_value().get_varchar();
+    if (!file_sql::decode(std::string(encoded.ptr(), encoded.length()), spec, error)) {
+      return OB_INVALID_ARGUMENT;
+    }
+    for (const auto &column : spec.columns) {
+      ObString name;
+      if (OB_FAIL(ob_write_string(*params.allocator_, ObString(column.name.size(), column.name.data()), name))) {
+        break;
+      } else if (OB_FAIL(column_names.push_back(name))) {
+        break;
+      }
+    }
+    return ret;
+  }
   ObRawExpr *table_expr = NULL;
   ObPLPackageGuard *package_guard = nullptr;
   const ObUserDefinedType *user_type = NULL;

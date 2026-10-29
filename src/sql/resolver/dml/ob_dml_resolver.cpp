@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SQL_RESV
+#include "sql/resolver/dml/file_sql_resolver.h"
 #include "config_bridge.h"
 #include "ob_dml_resolver.h"
 #include "sql/resolver/dml/ob_view_table_resolver.h"
@@ -3926,6 +3927,7 @@ int ObDMLResolver::resolve_json_table_item(const ParseNode &parse_tree, TableIte
 int ObDMLResolver::resolve_function_table_item(const ParseNode &parse_tree,
                                                TableItem *&tbl_item)
 {
+  if (parse_tree.value_ == FILE_SQL_PARSE_MARKER) return resolve_file_table_item(parse_tree, tbl_item);
   int ret = OB_SUCCESS;
   ObDMLStmt *stmt = get_stmt();
   ParseNode *alias_node = NULL;
@@ -7471,6 +7473,7 @@ int ObDMLResolver::resolve_json_table_column_all_items(const TableItem &table_it
 int ObDMLResolver::resolve_function_table_column_item(const TableItem &table_item,
                                                       ObIArray<ColumnItem> &col_items)
 {
+  if (is_file_sql_expr(table_item.function_table_expr_)) return resolve_file_table_columns(table_item, col_items);
   int ret = OB_SUCCESS;
   CK (OB_LIKELY(table_item.is_function_table()));
   CK (OB_NOT_NULL(table_item.function_table_expr_));

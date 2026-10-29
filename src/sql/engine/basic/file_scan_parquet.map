@@ -1,0 +1,4 @@
+{
+  global: file_parquet_*;
+  local: *;
+};

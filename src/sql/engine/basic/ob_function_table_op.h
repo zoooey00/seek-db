@@ -20,11 +20,13 @@
 #include "sql/engine/ob_operator.h"
 #include "sql/engine/basic/ob_chunk_datum_store.h"
 #include "lib/charset/ob_charset.h"
+#include "sql/pl/ob_pl_user_type.h"
 
 namespace oceanbase
 {
 namespace sql
 {
+namespace file_sql { class Reader; }
 
 class ObExpr;
 class ObFunctionTableSpec : public ObOpSpec
@@ -32,11 +34,13 @@ class ObFunctionTableSpec : public ObOpSpec
 OB_UNIS_VERSION_V(1);
 public:
   ObFunctionTableSpec(common::ObIAllocator &alloc, const ObPhyOperatorType type)
-    : ObOpSpec(alloc, type), value_expr_(nullptr), column_exprs_(alloc), has_correlated_expr_(false)
+    : ObOpSpec(alloc, type), value_expr_(nullptr), column_exprs_(alloc), has_correlated_expr_(false), file_sql_config_(), file_column_indices_(alloc)
   {}
   ObExpr *value_expr_;
   common::ObFixedArray<ObExpr*, common::ObIAllocator> column_exprs_;
   bool has_correlated_expr_;
+  common::ObString file_sql_config_;
+  common::ObFixedArray<int64_t, common::ObIAllocator> file_column_indices_;
 };
 
 class ObFunctionTableOp : public ObOperator
@@ -48,7 +52,8 @@ public:
     already_calc_(false),
     row_count_(0),
     col_count_(0),
-    value_table_(NULL) 
+    value_table_(NULL),
+    file_reader_(nullptr)
   {}
 
   virtual int inner_open() override;
@@ -58,6 +63,8 @@ public:
   virtual int inner_close() override;
   virtual void destroy() override;
 private:
+  int open_file_sql();
+  int inner_get_next_row_file_sql();
   int inner_get_next_row_udf();
   int inner_get_next_row_sys_func();
   int get_current_result(common::ObObj &result);
@@ -67,6 +74,7 @@ private:
   int64_t col_count_;
   common::ObObj value_;
   pl::ObPLCollection *value_table_;
+  file_sql::Reader *file_reader_;
   int (ObFunctionTableOp::*next_row_func_)();
 };
 

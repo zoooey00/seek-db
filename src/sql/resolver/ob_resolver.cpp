@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SQL_RESV
+#include "sql/resolver/dml/file_sql_resolver.h"
 #include "sql/resolver/ob_resolver.h"
 #include "lib/utility/ob_smart_call.h"
 #include "lib/stat/ob_diagnostic_info_guard.h"
@@ -139,6 +140,12 @@ int ObResolver::select_stmt_resolver_func(ObResolverParams &params, const ParseN
 
 int ObResolver::resolve(IsPrepared if_prepared, const ParseNode &parse_tree, ObStmt *&stmt)
 {
+  if (parse_tree.type_ == T_EXPLAIN && parse_tree.num_child_ == 5
+      && parse_tree.children_[0] != nullptr
+      && parse_tree.children_[0]->type_ == T_INT
+      && parse_tree.children_[0]->value_ == FILE_SQL_PARSE_MARKER) {
+    return resolve_file_describe(parse_tree, stmt);
+  }
 #define REGISTER_STMT_RESOLVER(name)                                   \
   do {                                                                 \
     ret = stmt_resolver_func<Ob##name##Resolver>(params_, *real_parse_tree, stmt); \

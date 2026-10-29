@@ -95,6 +95,7 @@
 #include "sql/engine/pdml/static/ob_px_sstable_insert_op.h"
 #include "sql/engine/basic/ob_select_into_op.h"
 #include "sql/engine/basic/ob_function_table_op.h"
+#include "sql/resolver/dml/file_sql_resolver.h"
 #include "sql/engine/basic/ob_json_table_op.h"
 #include "sql/engine/dml/ob_table_insert_op.h"
 #include "sql/engine/basic/ob_stat_collector_op.h"
@@ -5487,6 +5488,19 @@ int ObStaticEngineCG::generate_spec(ObLogSelectInto &op, ObSelectIntoSpec &spec,
       spec.parallel_ = op.get_parallel();
       spec.is_overwrite_ = op.get_is_overwrite();
       spec.plan_->need_drive_dml_query_ = true;
+      if (spec.external_properties_.str_.prefix_match(file_sql::SPEC_PREFIX)) {
+        file_sql::Spec config; std::string error, encoded;
+        ObString raw = spec.external_properties_.str_;
+        if (!file_sql::decode(std::string(raw.ptr(), raw.length()), config, error)) ret = OB_INVALID_ARGUMENT;
+        const ObSelectStmt *select = static_cast<const ObSelectStmt *>(op.get_stmt());
+        for (int64_t i = 0; OB_SUCC(ret) && i < select->get_select_item_size(); ++i) {
+          const SelectItem &item = select->get_select_item(i);
+          ObString name = item.alias_name_.empty() ? item.expr_name_ : item.alias_name_;
+          config.columns.push_back({std::string(name.ptr(), name.length()), file_sql::Type::Varchar, true, 0});
+        }
+        if (OB_SUCC(ret) && !file_sql::encode(config, encoded, error)) ret = OB_INVALID_ARGUMENT;
+        if (OB_SUCC(ret)) ret = spec.external_properties_.store_str(ObString(encoded.size(), encoded.data()));
+      }
     }
   }
   return ret;
@@ -5511,6 +5525,11 @@ int ObStaticEngineCG::generate_spec(ObLogFunctionTable &op, ObFunctionTableSpec 
   } else {
     spec.has_correlated_expr_ = value_raw_expr->has_flag(CNT_DYNAMIC_PARAM);
     spec.value_expr_ = value_expr;
+    if (is_file_sql_expr(value_raw_expr)) {
+      const ObString config = static_cast<ObConstRawExpr *>(value_raw_expr)->get_value().get_varchar();
+      OZ (ob_write_string(alloc, config, spec.file_sql_config_));
+      OZ (spec.file_column_indices_.init(op.get_stmt()->get_column_size()));
+    }
     for (int64_t i = 0; OB_SUCC(ret) && i < op.get_output_exprs().count(); ++i) {
       if (OB_FAIL(mark_expr_self_produced(op.get_output_exprs().at(i)))) {
       }
@@ -5526,6 +5545,9 @@ int ObStaticEngineCG::generate_spec(ObLogFunctionTable &op, ObFunctionTableSpec 
         OZ (mark_expr_self_produced(col_item->expr_));
         OZ (generate_rt_expr(*col_item->expr_, rt_expr));
         OZ (spec.column_exprs_.push_back(rt_expr));
+        if (OB_SUCC(ret) && !spec.file_sql_config_.empty()) {
+          OZ (spec.file_column_indices_.push_back(col_item->column_id_ - OB_APP_MIN_COLUMN_ID));
+        }
       }
     }
   }
