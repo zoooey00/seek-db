@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX SQL
 #include "ob_result_set.h"
+#include "sql/ai_column/ai_column.h"
 #include "data_plane/transaction/ob_tx_desc_access.h"
 #include "share/rc/ob_server_runtime.h"
 #include "sql/resolver/dml/ob_del_upd_stmt.h"
@@ -463,6 +464,14 @@ OB_INLINE int ObResultSet::do_open_plan(ObExecContext &ctx)
   if (OB_FAIL(ret)) {
   } else if (OB_FAIL(start_stmt())) {
   } else {
+    // Nested SQL requires an active outer statement. Check readiness in the
+    // caller's transaction before any physical operator can read or write rows.
+    const ObSqlCtx *sql_ctx = ctx.get_sql_ctx();
+    if (ai_column::strict_mode(&my_session_)
+        && literal_stmt_type_ != stmt::T_ALTER_TABLE && sql_ctx && sql_ctx->cur_stmt_
+        && sql_ctx->cur_stmt_->is_dml_stmt()) {
+      ret = ai_column::check_strict(ctx, *static_cast<const ObDMLStmt*>(sql_ctx->cur_stmt_));
+    }
     /* Set exec_result_ to the executor's runtime environment for returning data */
     /* execute plan,
      * For local and distributed plans, all jobs except RootJob finish before execute_plan returns.

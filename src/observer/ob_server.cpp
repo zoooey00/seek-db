@@ -17,6 +17,7 @@
 #define USING_LOG_PREFIX SERVER
 
 #include "config_bridge.h"
+#include "sql/ai_column/ai_column.h"
 #include "config_checkers.h"
 #ifndef _WIN32
 #include <unistd.h>
@@ -1349,6 +1350,9 @@ int ObServer::start()
   } else if (!stop_) {
     GCTX.status_ = SS_SERVING;
     GCTX.start_service_time_ = start_service_time;
+    if (OB_FAIL(sql::ai_column::start_worker(&sql_proxy_))) {
+      LOG_ERROR("failed to start AI column worker", KR(ret));
+    }
     FLOG_INFO("[OBSERVER_NOTICE] observer start service", "start_service_time", GCTX.start_service_time_);
     LOG_DBA_INFO_V2(OB_SERVER_START_SUCCESS,
                     DBA_STEP_INC_INFO(server_start),
@@ -1526,6 +1530,7 @@ bool ObServer::is_stopped()
 
 void ObServer::set_stop()
 {
+  sql::ai_column::stop_worker();
   net_frame_.sql_nio_stop();
   stop_ = true;
   ob_service_.set_stop();

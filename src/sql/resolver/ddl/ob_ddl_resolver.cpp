@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SQL_RESV
+#include "sql/ai_column/ai_column.h"
 #include "config_bridge.h"
 #include "ob_ddl_resolver.h"
 #include "data_plane/blocksstable/ob_index_block_util.h"
@@ -2153,6 +2154,13 @@ int ObDDLResolver::resolve_normal_column_attribute(ObColumnSchemaV2 &column,
         }
         break;
       }
+      case T_INVALID:
+        if (attr_node->value_ == ai_column::PARSE_MARKER) {
+          ret = ai_column::resolve_definition(column, *attr_node);
+        } else {
+          ret = OB_ERR_UNEXPECTED;
+        }
+        break;
       case T_CONSTR_AUTO_INCREMENT:
         if (ob_is_text_tc(column.get_data_type()) || ob_is_json_tc(column.get_data_type())
             || ob_is_geometry_tc(column.get_data_type())) {

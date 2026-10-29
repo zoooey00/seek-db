@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SQL_ENG
+#include "sql/ai_column/ai_column.h"
 #include "config_bridge.h"
 #include "common/ob_timeout_ctx.h"
 #include "lib/stat/ob_diagnostic_info_guard.h"
@@ -492,6 +493,15 @@ int ObCreateTableExecutor::execute(ObExecContext &ctx, ObCreateTableStmt &stmt)
       if (OB_FAIL(execute_ctas(ctx, stmt))){
       }
     }
+    if (OB_SUCC(ret) && !res.do_nothing_) {
+      bool has_ai=false;
+      for (auto it=table_schema.column_begin();it!=table_schema.column_end();++it) {
+        has_ai |= *it && ai_column::is_result(**it);
+      }
+      if (has_ai) {
+        ret=ai_column::install(ctx,ai_column::string(stmt.get_database_name()),ai_column::string(stmt.get_table_name()));
+      }
+    }
     SERVER_EVENT_ADD("ddl", "create table execute finish",
       "ret", ret,
       "trace_id", *ObCurTraceId::get_trace_id(),
@@ -877,6 +887,9 @@ int ObAlterTableExecutor::execute(ObExecContext &ctx, ObAlterTableStmt &stmt)
       "task_id", res.task_id_,
       "table_info", table_info_buffer,
       "schema_version", res.schema_version_);
+    if (OB_SUCC(ret)) {
+      ret=ai_column::install(ctx,ai_column::string(stmt.get_org_database_name()),ai_column::string(stmt.get_org_table_name()));
+    }
     SQL_ENG_LOG(INFO, "finish alter table execute.", K(ret), "ddl_event_info", ObDDLEventInfo(GCTX.self_addr()), K(first_stmt));
   }
   return ret;

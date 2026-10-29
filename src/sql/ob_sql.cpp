@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SQL
+#include "sql/ai_column/ai_column.h"
 #include "config_bridge.h"
 #include "sql/ob_sql.h"
 #include "lib/json/ob_json_print_utils.h"
@@ -2143,6 +2144,10 @@ int ObSql::generate_stmt(ParseResult &parse_result,
         ret = resolver.resolve(ObResolver::IS_NOT_PREPARED_STMT, *parse_result.result_tree_->children_[0], stmt);
       }
 
+      if (OB_SUCC(ret) && stmt != nullptr && stmt->is_dml_stmt()
+          && !ai_column::is_retry_node(*parse_result.result_tree_->children_[0])) {
+        ret=ai_column::check_write(resolver_ctx,*static_cast<ObDMLStmt*>(stmt));
+      }
       // set const param constraint after resolving
       context.all_plan_const_param_constraints_ = &(resolver_ctx.query_ctx_->all_plan_const_param_constraints_);
       context.all_possible_const_param_constraints_ = &(resolver_ctx.query_ctx_->all_possible_const_param_constraints_);
@@ -2967,6 +2972,10 @@ int ObSql::pc_get_plan(ObPlanCacheCtx &pc_ctx,
                        int &get_plan_err,
                        bool &need_disconnect)
 {
+  if (ai_column::strict_mode(pc_ctx.sql_ctx_.session_info_)) {
+    get_plan_err=OB_SQL_PC_NOT_EXIST;
+    return OB_SUCCESS;
+  }
   ACTIVE_SESSION_FLAG_SETTER_GUARD(in_get_plan_cache);
   int ret = OB_SUCCESS;
   //NG_TRACE(cache_get_plan_begin);
@@ -3523,7 +3532,8 @@ int ObSql::need_add_plan(const ObPlanCacheCtx &pc_ctx,
   result.get_exec_context().get_stmt_factory()->get_query_ctx();
   if (false == need_add_plan) {
     // do nothing
-  } else if (!is_enable_pc || !pc_ctx.should_add_plan_) {
+  } else if (!is_enable_pc || !pc_ctx.should_add_plan_
+             || ai_column::strict_mode(pc_ctx.sql_ctx_.session_info_)) {
     need_add_plan = false;
   } else if (OB_ISNULL(result.get_exec_context().get_stmt_factory())
              || OB_ISNULL(result.get_exec_context().get_stmt_factory()->get_query_ctx())) {

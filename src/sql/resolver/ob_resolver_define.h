@@ -438,6 +438,7 @@ private:
   int64_t new_gen_wid_;   // when number
   friend class ObStmtResolver;
 public:
+  uint64_t ai_retry_table_id_ = common::OB_INVALID_ID; // scoped internal AI retry resolution
   bool is_resolve_table_function_expr_;  // used to mark resolve table function expr.
   int64_t tg_timing_event_;      // mysql mode, trigger timing and type
   bool is_column_ref_;                   // used to mark normal column ref

@@ -421,6 +421,7 @@ END_P SET_VAR DELIMITER
 %type <node> opt_equal_mark opt_default_mark read_only_or_write not not2
 %type <node> int_or_decimal
 %type <node> opt_column_attribute_list column_attribute column_attribute_list opt_column_default_value opt_column_default_value_list
+%type <node> opt_ai_retry_actions
 %type <node> show_stmt from_or_in columns_or_fields database_or_schema index_or_indexes_or_keys opt_from_or_in_database_clause opt_show_condition opt_desc_column_option opt_status opt_storage opt_show_engine check_table_options check_table_option
 %type <node> prepare_stmt stmt_name preparable_stmt
 %type <node> variable_set_stmt var_and_val_list var_and_val to_or_eq set_expr_or_default sys_var_and_val
@@ -499,6 +500,7 @@ END_P SET_VAR DELIMITER
 %type <node> vec_index_params vec_index_param vec_index_param_value opt_with_vector_index_parameters
 %type <node> file_copy_stmt file_copy_options file_copy_option_list file_copy_option file_copy_value
 %type <node> file_table_expr
+%type <node> ai_column_options
 %type <node> json_table_expr unnest_expr mock_jt_on_error_on_empty jt_column_list json_table_column_def
 %type <node> json_table_ordinality_column_def json_table_exists_column_def json_table_value_column_def json_table_nested_column_def
 %type <node> opt_value_on_empty_or_error_or_mismatch opt_on_mismatch
@@ -6141,7 +6143,18 @@ column_attribute_list column_attribute
   $$ = $1;
 }
 
+ai_column_options:
+WITH '(' expr_list ')' { $$ = $3; }
+| /* empty */ { $$ = NULL; }
+;
+
 column_attribute:
+AI COLUMN '(' expr ')' ai_column_options
+{
+  malloc_non_terminal_node($$, result->malloc_pool_, T_INVALID, 2, $4, $6);
+  $$->value_ = 0x4149434f;
+}
+|
 not NULLX
 {
   (void)($1) ;
@@ -12708,7 +12721,15 @@ CLASS_ORIGIN
  *
  *****************************************************************************/
 show_stmt:
-SHOW opt_extended_or_full TABLES opt_from_or_in_database_clause opt_show_condition
+SHOW AI columns_or_fields from_or_in relation_factor
+{
+  (void)$3; (void)$4;
+  ParseNode *marker = NULL;
+  malloc_terminal_node(marker, result->malloc_pool_, T_INT);
+  marker->value_ = 0x4149434f;
+  malloc_non_terminal_node($$, result->malloc_pool_, T_EXPLAIN, 5, marker, NULL, NULL, NULL, $5);
+}
+| SHOW opt_extended_or_full TABLES opt_from_or_in_database_clause opt_show_condition
 {
   ParseNode *value = NULL;
   malloc_terminal_node(value, result->malloc_pool_, T_INT);
@@ -14735,7 +14756,25 @@ relation_factor TO relation_factor
  *	ALTER TABLE grammar
  *
  *****************************************************************************/
+opt_ai_retry_actions:
+/* EMPTY */ { $$ = NULL; }
+| ',' alter_table_actions { $$ = $2; }
+;
+
 alter_table_stmt:
+alter_with_opt_hint TABLE relation_factor NAME_OB AI COLUMN column_name opt_where opt_ai_retry_actions
+{
+  if ($4->str_len_ != 5 || strncasecmp($4->str_value_, "retry", 5) != 0) {
+    yyerror(&@4, result, "Expected RETRY AI COLUMN"); YYERROR;
+  }
+  if ($8 != NULL) { dup_expr_string($8, result, @8.first_column, @8.last_column); }
+  ParseNode *retry = NULL;
+  malloc_non_terminal_node(retry, result->malloc_pool_, T_INVALID, 3, $7, $8, $9);
+  retry->value_ = 0x4149434f;
+  malloc_non_terminal_node($$, result->malloc_pool_, T_ALTER_TABLE, 4, $3, retry, NULL, $1);
+  $$->value_ = 0;
+}
+|
 alter_with_opt_hint TABLE relation_factor alter_table_actions
 {
   ParseNode *table_actions = NULL;

@@ -537,7 +537,8 @@ int ObDelUpdResolver::resolve_additional_assignments(ObIArray<ObTableAssignment>
         } else if (FALSE_IT(need_assigned = need_assigned || 
                                             ((column_schema->is_vec_hnsw_vid_column() ||
                                               column_schema->is_vec_ivf_center_id_column()) && 
-                                             (update_with_vector_index || T_INSERT_SCOPE == scope)))) {
+                                             // A BEFORE trigger may change a vector absent from the SQL SET list.
+                                             (update_with_vector_index || trigger_exist || T_INSERT_SCOPE == scope)))) {
         } else if (need_assigned) {
           // for insert scope, on duplicate key update column list already
           // exists in insert list, therefore, only need to add assignment.

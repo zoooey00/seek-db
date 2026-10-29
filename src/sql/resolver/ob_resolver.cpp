@@ -15,6 +15,7 @@
  */
 
 #define USING_LOG_PREFIX SQL_RESV
+#include "sql/ai_column/ai_column.h"
 #include "sql/resolver/dml/file_sql_resolver.h"
 #include "sql/resolver/ob_resolver.h"
 #include "lib/utility/ob_smart_call.h"
@@ -140,6 +141,11 @@ int ObResolver::select_stmt_resolver_func(ObResolverParams &params, const ParseN
 
 int ObResolver::resolve(IsPrepared if_prepared, const ParseNode &parse_tree, ObStmt *&stmt)
 {
+  if (ai_column::is_retry_node(parse_tree)) return resolve_ai_retry(parse_tree, stmt);
+  if (parse_tree.type_ == T_EXPLAIN && parse_tree.num_child_ == 5
+      && parse_tree.children_[0] && parse_tree.children_[0]->type_ == T_INT
+      && parse_tree.children_[0]->value_ == ai_column::PARSE_MARKER)
+    return resolve_ai_show(parse_tree, stmt);
   if (parse_tree.type_ == T_EXPLAIN && parse_tree.num_child_ == 5
       && parse_tree.children_[0] != nullptr
       && parse_tree.children_[0]->type_ == T_INT

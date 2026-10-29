@@ -10988,6 +10988,19 @@
     "info_cn": "启用受 secure_file_priv 限制的本地文件 SQL",
     "background_cn": "",
     "ref_url": ""
+  },
+  "ai_column_strict_read": {
+    "id": 10755,
+    "name": "ai_column_strict_read",
+    "default_value": "0",
+    "base_value": "0",
+    "data_type": "bool",
+    "info": "Reject statements referencing an AI column with any non-READY row",
+    "flags": "GLOBAL | SESSION | INFLUENCE_PLAN | NEED_SERIALIZE",
+    "publish_version": "1.4.0.0",
+    "info_cn": "读取尚未全部就绪的 AI 列时报错",
+    "background_cn": "",
+    "ref_url": ""
   }
 
 }

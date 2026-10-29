@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+// AI-owned hidden state and implicit row keys are needed by internal triggers.
+#include "sql/ai_column/ai_column.h"
 #define USING_LOG_PREFIX PL
 
 #include "config_bridge.h"
@@ -1233,7 +1235,7 @@ int ObPLResolver::build_record_type_by_table_schema(ObSchemaGetterGuard &schema_
     ObTableSchema::const_column_iterator cs_iter_end = table_schema->column_end();
     for (; OB_SUCC(ret) && cs_iter != cs_iter_end; cs_iter++) {
       const ObColumnSchemaV2 &column_schema = **cs_iter;
-      if (!column_schema.is_hidden()) {
+      if (sql::ai_column::is_trigger_column(*table_schema, column_schema)) {
         ObPLDataType pl_type;
         ObDataType data_type;
         data_type.set_meta_type(column_schema.get_meta_type());

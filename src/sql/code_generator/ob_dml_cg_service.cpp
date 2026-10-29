@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "sql/ai_column/ai_column.h"
 #define USING_LOG_PREFIX SQL_CG
 #include "ob_dml_cg_service.h"
 #include "sql/code_generator/ob_static_engine_cg.h"
@@ -1054,7 +1055,14 @@ int ObDmlCgService::add_vec_idx_col_projector(const ObIArray<ExprType*> &cur_row
   uint64_t vid_cid = das_ctdef.table_param_.get_data_table().get_vec_id_col_id();
   if (vid_cid != OB_INVALID_ID) {
     for (int64_t i = 0; OB_SUCC(ret) && i < full_row.count(); ++i) {
-      if (full_row.at(i)->get_expr_type() == T_FUN_SYS_VEC_VID) {
+      ObRawExpr *value_expr = nullptr;
+      if (OB_FAIL(ObRawExprUtils::erase_inner_added_exprs(full_row.at(i), value_expr))) {
+      } else if (value_expr->get_expr_type() == T_FUN_COLUMN_CONV && value_expr->get_param_count() >= 5) {
+        ret = ObRawExprUtils::erase_inner_added_exprs(value_expr->get_param_expr(4), value_expr);
+      }
+      // BEFORE triggers wrap implicit assignments. Project the wrapped fresh
+      // VID as well, or successive vector updates reuse an old deletion key.
+      if (OB_SUCC(ret) && value_expr->get_expr_type() == T_FUN_SYS_VEC_VID) {
         projector_idx = i;
         break;
       }
@@ -2313,7 +2321,7 @@ int ObDmlCgService::convert_normal_triggers(ObLogDelUpd &log_op,
         } else if (OB_ISNULL(column_schema = *cs_iter)) {
           ret = OB_ERR_UNEXPECTED;
         } else {
-          is_hidden = column_schema->is_hidden();
+          is_hidden = !ai_column::is_trigger_column(*table_schema, *column_schema);
           is_gen_col = column_schema->is_generated_column();
           is_gen_col_dep = column_schema->has_generated_column_deps();
           is_update = has_exist_in_array(updated_column_ids, column_schema->get_column_id());
