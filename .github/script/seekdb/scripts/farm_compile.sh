@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Farm compile: build seekdb/observer in workspace.
-# Expects: WORKSPACE, SEEKDB_TASK_DIR, PACKAGE_TYPE (debug|release), REPO=server
+# Expects: WORKSPACE, SEEKDB_TASK_DIR, PACKAGE_TYPE (release|sanity), REPO=server
 set -e
 
 cd "$WORKSPACE"
-# Use repo build.sh; debug or release from PACKAGE_TYPE
-build_type="${PACKAGE_TYPE:-debug}"
+# Match the maintained build.sh production mode when the caller supplies none.
+build_type="${PACKAGE_TYPE:-release}"
 if [[ -x "$WORKSPACE/build.sh" ]]; then
   bash "$WORKSPACE/build.sh" "$build_type" --init --make
 else

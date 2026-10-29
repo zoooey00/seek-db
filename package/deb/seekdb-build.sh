@@ -66,6 +66,7 @@ function install_payload
   local release=$3
   local maintainer_script_dir=$4
   local binary="${TOP_DIR}/build_release/src/observer/seekdb"
+  local parquet_library="${TOP_DIR}/build_release/src/observer/libseekdb_file_parquet.so"
   local obshell_binary="${TOP_DIR}/deps/3rd/home/admin/oceanbase/bin/obshell"
   local syspack_dir="${TOP_DIR}/build_release/syspack_release"
   local profile_dir="${TOP_DIR}/tools/systemd/profile"
@@ -79,9 +80,11 @@ function install_payload
 
   require_file "${profile_dir}/telemetry.sh.template"
   require_file "${obshell_binary}"
+  require_file "${parquet_library}"
 
   install -d \
     "${package_root}/usr/bin" \
+    "${package_root}/usr/lib" \
     "${package_root}/usr/lib/systemd/system" \
     "${package_root}/usr/libexec/seekdb/scripts" \
     "${package_root}/usr/share/seekdb/admin" \
@@ -90,6 +93,7 @@ function install_payload
     "${package_root}/etc/seekdb"
 
   install -m 0755 "${binary}" "${package_root}/usr/bin/seekdb"
+  install -m 0755 "${parquet_library}" "${package_root}/usr/lib/libseekdb_file_parquet.so"
   install -m 0755 "${obshell_binary}" "${package_root}/usr/bin/obshell"
   install -m 0644 "${profile_dir}/seekdb.service" \
     "${package_root}/usr/lib/systemd/system/seekdb.service"

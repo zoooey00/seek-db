@@ -69,11 +69,14 @@ try:
     query('SET SESSION enable_file_sql=OFF')
     check('disabled file SQL rejected',f'SELECT COUNT(*) FROM {csv("basic.csv")}',error=1235)
     check('ordinary SQL remains usable','SELECT 6*7',[[42]])
+    check('ordinary DESCRIBE with file SQL disabled','DESCRIBE SELECT 42',predicate=lambda rows:'EXPRESSION' in str(rows))
+    check('ordinary DESC with file SQL disabled','DESC SELECT 42',predicate=lambda rows:'EXPRESSION' in str(rows))
     query('SET GLOBAL secure_file_priv=%s',(str(directory),))
     # Global settings are inherited by a new connection, not the setup session.
     connection.close();connection=connect()
     query('USE file_sql_regression')
     query('SET SESSION enable_file_sql=ON')
+    check('ordinary DESCRIBE with file SQL enabled','DESCRIBE SELECT 42',predicate=lambda rows:'EXPRESSION' in str(rows))
     check('CSV original fixture',f'SELECT id,name,score,active,day,created,REPLACE(note,CHAR(10),\'<NL>\'),id__2 FROM {csv("basic.csv")} f ORDER BY id',
           [[1,'Alice',98.5,1,'2026-08-01','2026-08-01 10:11:12','hello,<NL>world',101],
            [2,'Bob',87.0,0,None,None,'plain',102],

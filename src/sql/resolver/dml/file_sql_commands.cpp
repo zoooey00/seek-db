@@ -19,6 +19,25 @@ std::string sql_text(const std::string&s){static const char hex[]="0123456789abc
 int ObResolver::resolve_file_describe(const ParseNode&node,ObStmt*&stmt)
 {
   if(node.num_child_!=5||node.children_[4]==nullptr||node.children_[4]->type_!=T_SELECT)return OB_INVALID_ARGUMENT;
+  // DESCRIBE ordinary SELECT remains the existing EXPLAIN synonym. Inspect
+  // only syntax here so disabled file SQL does not affect ordinary statements.
+  bool has_file_source=false;
+  std::vector<const ParseNode *> pending{node.children_[4]};
+  while(!pending.empty()&&!has_file_source){
+    const ParseNode *current=pending.back();pending.pop_back();
+    if(current==nullptr)continue;
+    if(current->type_==T_TABLE_COLLECTION_EXPRESSION&&current->value_==FILE_SQL_PARSE_MARKER){
+      has_file_source=true;
+    }else {
+      for(int i=0;i<current->num_child_;++i)pending.push_back(current->children_[i]);
+    }
+  }
+  if(!has_file_source){
+    ParseNode explain=node;
+    ParseNode *children[5]={nullptr,node.children_[1],node.children_[2],node.children_[3],node.children_[4]};
+    explain.children_=children;
+    return resolve(IS_NOT_PREPARED_STMT,explain,stmt);
+  }
   int ret=OB_SUCCESS;ObSelectResolver source(params_);
   if(OB_FAIL(source.resolve(*node.children_[4])))return ret;
   ObSelectStmt *select=source.get_select_stmt();if(select==nullptr)return OB_ERR_UNEXPECTED;

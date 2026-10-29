@@ -9,6 +9,9 @@ target_link_libraries(ob_sql PUBLIC ob_base config)
 # from gRPC. A C interface plus hidden archive symbols isolates both ABIs and
 # prevents symbol interposition; all relational operators execute in seekdb.
 add_library(seekdb_file_parquet SHARED engine/basic/file_scan_parquet.cpp)
+# Keep the runtime decoder beside the executable for relocatable build bundles.
+set_target_properties(seekdb_file_parquet PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/observer")
 target_include_directories(seekdb_file_parquet PRIVATE
   ${PROJECT_SOURCE_DIR}/src ${DEP_DIR}/include ${DEP_DIR}/include/apache-arrow)
 target_link_options(seekdb_file_parquet PRIVATE
