@@ -1,0 +1,7 @@
+{
+  "server_requested": "0,2",
+  "actual_thread_masks": {
+    "0,2": 55
+  },
+  "client_requested": "4"
+}

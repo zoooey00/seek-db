@@ -1,0 +1,11 @@
+compile 0
+
+link 0
+
+run 0
+PASS character classification: 3336192 scalar/encoding pairs + malformed inputs
+PASS result-cell lifetime with a freeing allocator
+PASS chain lookup: empty, inline capacity boundaries, spill, reverse token insertion, both modes
+PASS beng token lifetime, normalization, repeated words and 4096-byte tokens
+PASS range dictionaries: destruction, capacity boundaries and allocation failures
+

@@ -1,0 +1,12 @@
+{
+  "exit_code": 0,
+  "command": [
+    "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+    "--build",
+    "/tmp/seekdb-fts-20261029/build",
+    "--target",
+    "seekdb",
+    "-j",
+    "3"
+  ]
+}

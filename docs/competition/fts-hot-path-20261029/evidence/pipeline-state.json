@@ -1,0 +1,348 @@
+{
+  "steps": [
+    {
+      "name": "strip-before",
+      "exit_code": 0,
+      "elapsed_sec": 0.6132354410001426,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-objcopy",
+        "--strip-debug",
+        "/tmp/seekdb-fts-20261029/build/src/observer/seekdb",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-before.new"
+      ]
+    },
+    {
+      "name": "start-before",
+      "exit_code": 0,
+      "elapsed_sec": 3.2766940009969403,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+        "--label",
+        "before",
+        "--binary",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-before"
+      ]
+    },
+    {
+      "name": "mysqltest-before",
+      "exit_code": 0,
+      "elapsed_sec": 4.181168376002461,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/run_mysqltest.py",
+        "--label",
+        "before",
+        "--names",
+        "tokenize_function",
+        "parser_properties",
+        "parser_hot_path"
+      ]
+    },
+    {
+      "name": "before-1",
+      "exit_code": 0,
+      "elapsed_sec": 33.07408330600447,
+      "command": [
+        "bash",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+      ]
+    },
+    {
+      "name": "before-1-fixed-score",
+      "exit_code": 0,
+      "elapsed_sec": 0.04809031199692981,
+      "command": [
+        "python3",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/before-1.txt",
+        "--json"
+      ]
+    },
+    {
+      "name": "before-sql",
+      "exit_code": 0,
+      "elapsed_sec": 4.7899414529965725,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/unittest/storage/fts/check_fts_sql.py",
+        "--mysql",
+        "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/obclient",
+        "--port",
+        "2901",
+        "--benchmark-results",
+        "--output",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/before-sql",
+        "--write",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/baseline-sql-reference.json"
+      ]
+    },
+    {
+      "name": "before-ik-profile",
+      "exit_code": 0,
+      "elapsed_sec": 7.0518042870025965,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/profile_tokenize.py",
+        "--label",
+        "before-ik",
+        "--parser",
+        "ik"
+      ]
+    },
+    {
+      "name": "before-beng-profile",
+      "exit_code": 0,
+      "elapsed_sec": 4.8984410440025385,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/profile_tokenize.py",
+        "--label",
+        "before-beng",
+        "--parser",
+        "beng"
+      ]
+    },
+    {
+      "name": "build-optimized",
+      "exit_code": 0,
+      "elapsed_sec": 45.35447119700257,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+        "--build",
+        "/tmp/seekdb-fts-20261029/build",
+        "--target",
+        "seekdb",
+        "oceanbase",
+        "-j",
+        "3"
+      ]
+    },
+    {
+      "name": "strip-after",
+      "exit_code": 0,
+      "elapsed_sec": 5.338491798000177,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-objcopy",
+        "--strip-debug",
+        "/tmp/seekdb-fts-20261029/build/src/observer/seekdb",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-after.new"
+      ]
+    },
+    {
+      "name": "start-after",
+      "exit_code": 0,
+      "elapsed_sec": 3.40873479199945,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+        "--label",
+        "after",
+        "--binary",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-after"
+      ]
+    },
+    {
+      "name": "mysqltest-after",
+      "exit_code": 1,
+      "elapsed_sec": 126.60903981600131,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/run_mysqltest.py",
+        "--label",
+        "after",
+        "--names",
+        "tokenize_function",
+        "parser_properties",
+        "parser_hot_path"
+      ]
+    },
+    {
+      "name": "build-optimized",
+      "exit_code": 0,
+      "elapsed_sec": 97.27373665200139,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+        "--build",
+        "/tmp/seekdb-fts-20261029/build",
+        "--target",
+        "seekdb",
+        "oceanbase",
+        "-j",
+        "3"
+      ]
+    },
+    {
+      "name": "strip-after",
+      "exit_code": 0,
+      "elapsed_sec": 3.54735699199955,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-objcopy",
+        "--strip-debug",
+        "/tmp/seekdb-fts-20261029/build/src/observer/seekdb",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-after.new"
+      ]
+    },
+    {
+      "name": "start-after",
+      "exit_code": 0,
+      "elapsed_sec": 3.843909233000886,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+        "--label",
+        "after",
+        "--binary",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-after"
+      ]
+    },
+    {
+      "name": "mysqltest-after",
+      "exit_code": 0,
+      "elapsed_sec": 6.923319444002118,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/run_mysqltest.py",
+        "--label",
+        "after",
+        "--names",
+        "tokenize_function",
+        "parser_properties",
+        "parser_hot_path"
+      ]
+    },
+    {
+      "name": "cpp-after",
+      "exit_code": 0,
+      "elapsed_sec": 11.799774419996538,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/unittest/storage/fts/run_fts_cpp.py",
+        "--build-dir",
+        "/tmp/seekdb-fts-20261029/build",
+        "--output",
+        "/tmp/seekdb-fts-20261029/cpp-final"
+      ]
+    },
+    {
+      "name": "after-1",
+      "exit_code": 0,
+      "elapsed_sec": 46.840879035997204,
+      "command": [
+        "bash",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+      ]
+    },
+    {
+      "name": "after-1-fixed-score",
+      "exit_code": 0,
+      "elapsed_sec": 0.17206145400268724,
+      "command": [
+        "python3",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/after-1.txt",
+        "--json"
+      ]
+    },
+    {
+      "name": "after-sql",
+      "exit_code": 0,
+      "elapsed_sec": 26.76060999499896,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/unittest/storage/fts/check_fts_sql.py",
+        "--mysql",
+        "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/obclient",
+        "--port",
+        "2901",
+        "--benchmark-results",
+        "--output",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/after-sql",
+        "--compare",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/baseline-sql-reference.json"
+      ]
+    },
+    {
+      "name": "after-ik-profile",
+      "exit_code": 0,
+      "elapsed_sec": 7.285660043999087,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/profile_tokenize.py",
+        "--label",
+        "after-ik",
+        "--parser",
+        "ik"
+      ]
+    },
+    {
+      "name": "after-beng-profile",
+      "exit_code": 0,
+      "elapsed_sec": 6.452194820994919,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/profile_tokenize.py",
+        "--label",
+        "after-beng",
+        "--parser",
+        "beng"
+      ]
+    },
+    {
+      "name": "after-2",
+      "exit_code": 0,
+      "elapsed_sec": 82.66854632800096,
+      "command": [
+        "bash",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+      ]
+    },
+    {
+      "name": "after-2-fixed-score",
+      "exit_code": 0,
+      "elapsed_sec": 0.07097523599804845,
+      "command": [
+        "python3",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/after-2.txt",
+        "--json"
+      ]
+    },
+    {
+      "name": "start-before-repeat",
+      "exit_code": 0,
+      "elapsed_sec": 4.761018867997336,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+        "--label",
+        "before-repeat",
+        "--binary",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-before"
+      ]
+    },
+    {
+      "name": "before-2",
+      "exit_code": 0,
+      "elapsed_sec": 40.22814298800222,
+      "command": [
+        "bash",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+      ]
+    },
+    {
+      "name": "before-2-fixed-score",
+      "exit_code": 0,
+      "elapsed_sec": 0.049701919000654016,
+      "command": [
+        "python3",
+        "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/before-2.txt",
+        "--json"
+      ]
+    }
+  ],
+  "active": null,
+  "resumed_after_dependency_timestamp_fix": true,
+  "complete": true
+}

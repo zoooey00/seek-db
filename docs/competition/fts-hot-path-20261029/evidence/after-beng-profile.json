@@ -1,0 +1,8 @@
+{
+  "query_exit": 0,
+  "record_exit": -2,
+  "report_exit": 0,
+  "rounds": 25000,
+  "elapsed_sec": 5.322955706993525,
+  "sql_sha256": "d52d1a8adde44ee8efd44a3d517db7414abc3c17266245ae70ef284915f528dd"
+}

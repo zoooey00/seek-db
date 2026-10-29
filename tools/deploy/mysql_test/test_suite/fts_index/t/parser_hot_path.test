@@ -1,0 +1,48 @@
+# Regression coverage for parser allocation and IK chain lookup optimizations.
+--disable_warnings
+DROP DATABASE IF EXISTS fts_hot_path_mysqltest;
+--enable_warnings
+CREATE DATABASE fts_hot_path_mysqltest;
+USE fts_hot_path_mysqltest;
+SET NAMES utf8mb4;
+SET ob_query_timeout=100000000000;
+
+--echo # Preserve normalization, grouping, frequencies and character classes.
+SELECT TOKENIZE('Alpha ALPHA alpha beta','beng','[{"output":"all"}]');
+SELECT TOKENIZE('ABC１２３ 中文 カタカナ 한글 😀𠀀','ik','[{"output":"all"}]');
+SELECT TOKENIZE('三百五十个苹果 110个星球','ik','[{"output":"all"}]');
+SELECT TOKENIZE('中华人民共和国人民大会堂','ik','[{"additional_args":[{"ik_mode":"smart"}]}]');
+SELECT TOKENIZE('中华人民共和国人民大会堂','ik','[{"additional_args":[{"ik_mode":"max_word"}]}]');
+SELECT TOKENIZE(CAST(REPEAT('alpha beta 数据库 ',100) AS CHAR CHARACTER SET utf8mb4),'ik','[{"output":"all"}]');
+SELECT TOKENIZE(CAST(REPEAT('ABC def ',100) AS CHAR CHARACTER SET utf8mb4),'beng','[{"output":"all"}]');
+SELECT TOKENIZE('','ik'), TOKENIZE('!!!','beng');
+
+--echo # Build both parser indexes on the same complete input.
+CREATE TABLE docs(id INT PRIMARY KEY, title VARCHAR(100), body TEXT) DEFAULT CHARSET=utf8mb4;
+INSERT INTO docs VALUES
+  (1,'数据库','全文索引 alpha ALPHA alpha'),
+  (2,'分词器','全文索引 beta 数据库'),
+  (3,'English','database performance audit alpha'),
+  (4,'Punctuation','!!!'),
+  (5,'Fullwidth','ＡＢＣ１２３ 中文 😀');
+ALTER TABLE docs ADD FULLTEXT INDEX ik_title(title,body) WITH PARSER ik;
+ALTER TABLE docs ADD FULLTEXT INDEX beng_body(body) WITH PARSER beng;
+SELECT id FROM docs WHERE MATCH(title,body) AGAINST('全文索引 数据库') ORDER BY id;
+SELECT id FROM docs WHERE MATCH(body) AGAINST('ALPHA database') ORDER BY id;
+SELECT id FROM docs WHERE MATCH(body) AGAINST('+alpha -database' IN BOOLEAN MODE) ORDER BY id;
+SELECT id FROM docs WHERE MATCH(title,body) AGAINST('不存在的词') ORDER BY id;
+SELECT id FROM docs WHERE MATCH(body) AGAINST('alpha') ORDER BY MATCH(body) AGAINST('alpha') DESC,id LIMIT 2;
+SELECT id,TOKENIZE(CAST(body AS CHAR CHARACTER SET utf8mb4),'beng','[{"output":"all"}]') FROM docs ORDER BY id;
+
+--echo # Verify writes and rollback maintain inverted-index results.
+UPDATE docs SET body='database 全文索引 beta' WHERE id=1;
+DELETE FROM docs WHERE id=2;
+INSERT INTO docs VALUES(6,'新增','alpha 全文索引');
+SELECT id FROM docs WHERE MATCH(body) AGAINST('alpha database') ORDER BY id;
+SELECT id FROM docs WHERE MATCH(title,body) AGAINST('全文索引') ORDER BY id;
+START TRANSACTION;
+UPDATE docs SET body='temporaryword' WHERE id=3;
+DELETE FROM docs WHERE id=6;
+ROLLBACK;
+SELECT id FROM docs WHERE MATCH(body) AGAINST('alpha database') ORDER BY id;
+DROP DATABASE fts_hot_path_mysqltest;

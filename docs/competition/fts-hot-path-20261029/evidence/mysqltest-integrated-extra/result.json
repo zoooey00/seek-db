@@ -1,0 +1,62 @@
+[
+  {
+    "name": "basic_dml",
+    "exit_code": 1,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/mysqltest-integrated-extra/basic_dml.wrapper.test",
+      "--result-file=/tmp/seekdb-fts-20261029/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/basic_dml.result",
+      "--logdir=/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/mysqltest-integrated-extra",
+      "--tmpdir=/tmp/seekdb-fts-20261029"
+    ],
+    "test_sha256": "1ce4330eb1c7d32553cebd5b0f92ed9ba11f0f35ddb6a10bc0f693bf111d0d96",
+    "expected_sha256": "6686ab5340271fd3772d145ecb98ba5d69bda1d7d3266277d79c4c6ca84629d0"
+  },
+  {
+    "name": "simple_query",
+    "exit_code": 0,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/tmp/seekdb-fts-20261029/source/tools/deploy/mysql_test/test_suite/fts_index/t/simple_query.test",
+      "--result-file=/tmp/seekdb-fts-20261029/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/simple_query.result",
+      "--logdir=/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/mysqltest-integrated-extra",
+      "--tmpdir=/tmp/seekdb-fts-20261029"
+    ],
+    "test_sha256": "4786c566b8862bbbfab6a4b6de2f8940f41fed6aae943be020f83969617dcd07",
+    "expected_sha256": "6172886af795b7e6e12f990bfc355985dbf51560da25a10775e20190ed7675e8"
+  },
+  {
+    "name": "create_fts_index_afterward",
+    "exit_code": 1,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/mysqltest-integrated-extra/create_fts_index_afterward.wrapper.test",
+      "--result-file=/tmp/seekdb-fts-20261029/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/create_fts_index_afterward.result",
+      "--logdir=/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/mysqltest-integrated-extra",
+      "--tmpdir=/tmp/seekdb-fts-20261029"
+    ],
+    "test_sha256": "0d0f7a814f06f7a5e6c29156f19b72bfa53dff326d5e43aa1532268ae0c0789c",
+    "expected_sha256": "e408f4e770ff2a6eb2a68a69e54f4449c035453e75a6a21e784f1caa32cc27fb"
+  }
+]

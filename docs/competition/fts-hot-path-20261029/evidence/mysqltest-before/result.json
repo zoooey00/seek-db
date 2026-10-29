@@ -1,0 +1,62 @@
+[
+  {
+    "name": "tokenize_function",
+    "exit_code": 0,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/tools/deploy/mysql_test/test_suite/fts_index/t/tokenize_function.test",
+      "--result-file=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/tokenize_function.result",
+      "--logdir=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/mysqltest-before",
+      "--tmpdir=/tmp/seekdb-fts-20261029"
+    ],
+    "test_sha256": "5bae535df71416c3f82bf875b5fc08fe015a81bfcc814357c4400585992fc987",
+    "expected_sha256": "46485235f362d7a77717fc00263a44122e919ccf3b0df70ff521e0fc38d5dc2d"
+  },
+  {
+    "name": "parser_properties",
+    "exit_code": 0,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/mysqltest-before/parser_properties.wrapper.test",
+      "--result-file=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/parser_properties.result",
+      "--logdir=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/mysqltest-before",
+      "--tmpdir=/tmp/seekdb-fts-20261029"
+    ],
+    "test_sha256": "ee487212fa2fcaf75f0892b50839b6c4309309d9853f16fc0b782685ebd732f6",
+    "expected_sha256": "e6dbc1e407e909d83d571c840c3292c766e70c2da173594fa1c98b090f03d60a"
+  },
+  {
+    "name": "parser_hot_path",
+    "exit_code": 0,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/tools/deploy/mysql_test/test_suite/fts_index/t/parser_hot_path.test",
+      "--result-file=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/parser_hot_path.result",
+      "--logdir=/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/mysqltest-before",
+      "--tmpdir=/tmp/seekdb-fts-20261029"
+    ],
+    "test_sha256": "e5db9dec4bae1852ccc1d1e7906ef01b68dd5a1f09abf4347acb41664984b7d6",
+    "expected_sha256": "9c3db754012e15c8cee5ef144906bdfbb47603ee37857019de0f9611b79b707f"
+  }
+]

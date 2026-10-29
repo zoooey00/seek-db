@@ -1,0 +1,4 @@
+let $OBMYSQL_MS0=127.0.0.1;
+let $OBMYSQL_PORT=2901;
+let $OBMYSQL_PWD=;
+source /mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/repository/tools/deploy/mysql_test/test_suite/fts_index/t/basic_dml.test;

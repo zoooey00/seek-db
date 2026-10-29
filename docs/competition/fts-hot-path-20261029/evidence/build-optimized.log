@@ -1,0 +1,89 @@
+[  0%] Built target seekdb_jemalloc_build
+[  0%] Built target restore
+[  1%] Built target oblib_grpc
+[  2%] Built target ob_malloc_object
+[  8%] Built target zstd_1_3_8_objs
+[  8%] Built target oblib_lib_simd
+[  9%] Built target oblib_lib_bitmap
+[ 10%] Built target oblib_rpc
+[ 14%] Built target oblib_common
+[ 15%] Built target malloc_hook
+[ 15%] Built target generate_syspack_source
+[ 15%] Built target ob_malloc
+[ 16%] Built target zstd_1_3_8
+[ 17%] Built target compress
+[ 21%] Built target oblib_lib
+[ 21%] Built target oblib
+[ 22%] Built target rust_staticlibs_build
+[ 26%] Built target ob_share_extra
+[ 26%] Built target ob_data_plane
+[ 27%] Built target ob_main
+[ 27%] Built target ob_query
+[ 32%] Built target ob_sql_extra
+[ 32%] Built target ob_sql_simd
+[ 38%] Built target ob_sql_server_parser_objects
+[ 38%] Building CXX object src/share/CMakeFiles/ob_share.dir/Unity/unity_ob_share_ob_share_text_analysis_0_c___cxx.cxx.o
+[ 40%] Built target ob_pl
+[ 40%] Built target syspack_source
+[ 40%] Built target ob_standby_runtime
+[ 40%] Built target ob_standby
+[ 59%] Built target ob_sql
+[ 60%] Built target ob_logservice
+[ 64%] Built target ob_rootserver
+[ 64%] Built target ob_storage_tablet_autoincrement_state
+[ 65%] Built target ob_storage_simd
+[ 72%] Built target ob_server
+[ 72%] Building CXX object src/storage/CMakeFiles/ob_storage.dir/Unity/unity_ob_storage_ob_storage_fts_0_c___cxx.cxx.o
+[ 72%] Built target ob_sql_server_parser_static
+[ 73%] Building CXX object src/storage/CMakeFiles/ob_storage.dir/Unity/unity_ob_storage_ob_storage_ik_0_c___cxx.cxx.o
+[ 88%] Built target ob_share
+[ 89%] Built target ob_sql_static
+[ 89%] Building CXX object src/storage/CMakeFiles/ob_storage.dir/Unity/unity_ob_storage_ob_storage_rebase_0_c___cxx.cxx.o
+[ 89%] Linking CXX static library libob_share_static.a
+[ 89%] Built target ob_share_static
+[100%] Built target ob_storage
+[100%] Linking CXX static library libob_storage_static.a
+[100%] Built target ob_storage_static
+[100%] Built target oceanbase_static
+[100%] Linking CXX executable seekdb
+[100%] Built target seekdb
+[  0%] Built target seekdb_jemalloc_build
+[  0%] Built target restore
+[  6%] Built target zstd_1_3_8_objs
+[  6%] Built target oblib_lib_simd
+[  7%] Built target oblib_lib_bitmap
+[  8%] Built target malloc_hook
+[  9%] Built target oblib_rpc
+[ 13%] Built target oblib_common
+[ 13%] Built target generate_syspack_source
+[ 14%] Built target oblib_grpc
+[ 15%] Built target ob_malloc_object
+[ 16%] Built target zstd_1_3_8
+[ 16%] Built target ob_malloc
+[ 17%] Built target compress
+[ 21%] Built target oblib_lib
+[ 22%] Built target rust_staticlibs_build
+[ 26%] Built target ob_share_extra
+[ 26%] Built target ob_data_plane
+[ 26%] Built target ob_query
+[ 32%] Built target ob_server
+[ 38%] Built target ob_sql_extra
+[ 38%] Built target ob_sql_simd
+[ 43%] Built target ob_sql_server_parser_objects
+[ 45%] Built target ob_pl
+[ 45%] Built target syspack_source
+[ 45%] Built target ob_standby_runtime
+[ 45%] Built target ob_standby
+[ 64%] Built target ob_sql
+[ 80%] Built target ob_share
+[ 81%] Built target ob_logservice
+[ 81%] Built target ob_storage_tablet_autoincrement_state
+[ 85%] Built target ob_rootserver
+[ 85%] Built target ob_share_static
+[ 85%] Built target ob_sql_server_parser_static
+[ 86%] Built target ob_storage_simd
+[ 87%] Built target ob_sql_static
+[ 98%] Built target ob_storage
+[ 98%] Built target ob_storage_static
+[100%] Linking CXX shared library liboceanbase.so
+[100%] Built target oceanbase

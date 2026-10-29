@@ -126,7 +126,7 @@ int ObIKArbitrator::output_result(TokenizeContext &ctx)
                                                          type))) {
     } else if (ObFTCharUtil::CharType::USELESS == type) {
       current += char_len; // skip useless char
-    } else if (OB_FAIL(chains_.get_refactored(current, chain)) && OB_HASH_NOT_EXIST != ret) {
+    } else if (OB_FAIL(find_chain(current, chain)) && OB_HASH_NOT_EXIST != ret) {
     } else if (OB_HASH_NOT_EXIST == ret) {
       ret = OB_SUCCESS;
       if (!keep_single()) {
@@ -300,16 +300,32 @@ int ObIKArbitrator::remove_conflict(const ObIKToken &token, ObIKTokenChain *opti
 
 int ObIKArbitrator::prepare(TokenizeContext &ctx)
 {
-  int ret = OB_SUCCESS;
-
-  int cal_bucket_num = MAX(ctx.fulltext_len() / 100, 10);
-  cal_bucket_num = MIN(cal_bucket_num, 100);
-  if (OB_FAIL(chains_.create(cal_bucket_num, ObMemAttr("IK ARBITRATE")))) {
-  }
-  return ret;
+  UNUSED(ctx);
+  chains_.reuse();
+  return OB_SUCCESS;
 }
 
-ObIKArbitrator::ObIKArbitrator() : alloc_(lib::ObMemAttr("IK Arbitrator")) {}
+ObIKArbitrator::ObIKArbitrator()
+    : alloc_(lib::ObMemAttr("IK Arbitrator")),
+      chains_(OB_MALLOC_NORMAL_BLOCK_SIZE, ObWrapperAllocator(alloc_))
+{}
+
+int ObIKArbitrator::find_chain(int64_t offset, ObIKTokenChain *&chain) const
+{
+  int64_t lo = 0;
+  int64_t hi = chains_.count();
+  while (lo < hi) {
+    const int64_t mid = lo + (hi - lo) / 2;
+    if (chains_.at(mid)->min_offset() < offset) {
+      lo = mid + 1;
+    } else {
+      hi = mid;
+    }
+  }
+  const bool found = lo < chains_.count() && chains_.at(lo)->min_offset() == offset;
+  chain = found ? chains_.at(lo) : nullptr;
+  return found ? OB_SUCCESS : OB_HASH_NOT_EXIST;
+}
 
 int ObIKArbitrator::add_chain(ObIKTokenChain *chain)
 {
@@ -318,14 +334,29 @@ int ObIKArbitrator::add_chain(ObIKTokenChain *chain)
     ret = OB_INVALID_ARGUMENT;
   } else if (chain->list().is_empty()) {
     // no need to add empty chain
-  } else if (OB_FAIL(chains_.set_refactored(chain->min_offset(), chain))) {
+  } else {
+    // Chains normally arrive in increasing offset order. Keep an ordered
+    // small array, avoiding a separate hash bucket/node allocator per batch.
+    int64_t pos = chains_.count();
+    while (pos > 0 && chains_.at(pos - 1)->min_offset() > chain->min_offset()) {
+      --pos;
+    }
+    if (pos > 0 && chains_.at(pos - 1)->min_offset() == chain->min_offset()) {
+      ret = OB_HASH_EXIST;
+    } else if (OB_FAIL(chains_.push_back(chain))) {
+    } else {
+      for (int64_t i = chains_.count() - 1; i > pos; --i) {
+        chains_.at(i) = chains_.at(i - 1);
+      }
+      chains_.at(pos) = chain;
+    }
   }
   return ret;
 }
 
 ObIKArbitrator::~ObIKArbitrator()
 {
-  chains_.destroy();
+  chains_.reset();
   alloc_.reset();
 }
 } // namespace storage

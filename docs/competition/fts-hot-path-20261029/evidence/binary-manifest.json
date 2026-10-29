@@ -1,0 +1,22 @@
+{
+  "before": {
+    "path": "/tmp/seekdb-fts-20261029/bin/seekdb-before",
+    "sha256": "73a2535e10c1fa0092caf7c7ca9389de33372562f21f577d7dbb53806bf05e6f",
+    "size_bytes": 165037800,
+    "source_commit": "5bce9e06d1281347ad61344e4b01fab9158c58a2",
+    "build_type": "RelWithDebInfo (-O2 -g -DNDEBUG); only debug sections removed from executable",
+    "cpu_count": 2,
+    "memory_limit": "2G",
+    "port": 2901
+  },
+  "after": {
+    "path": "/tmp/seekdb-fts-20261029/bin/seekdb-after",
+    "sha256": "3fda13d006601088baae43cc515b322eb8d7f67df01568760e2a24d95c5a39cd",
+    "size_bytes": 165041952,
+    "source_commit": "5bce9e06d1281347ad61344e4b01fab9158c58a2",
+    "build_type": "RelWithDebInfo (-O2 -g -DNDEBUG); only debug sections removed from executable",
+    "cpu_count": 2,
+    "memory_limit": "2G",
+    "port": 2901
+  }
+}

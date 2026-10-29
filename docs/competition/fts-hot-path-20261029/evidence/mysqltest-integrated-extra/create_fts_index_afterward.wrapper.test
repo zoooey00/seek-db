@@ -1,0 +1,4 @@
+let $OBMYSQL_MS0=127.0.0.1;
+let $OBMYSQL_PORT=2901;
+let $OBMYSQL_PWD=;
+source /tmp/seekdb-fts-20261029/source/tools/deploy/mysql_test/test_suite/fts_index/t/create_fts_index_afterward.test;

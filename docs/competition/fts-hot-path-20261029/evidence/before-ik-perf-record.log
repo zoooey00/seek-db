@@ -1,0 +1,2 @@
+[ perf record: Woken up 17 times to write data ]
+[ perf record: Captured and wrote 0.142 MB /tmp/seekdb-fts-20261029/profiles/before-ik.data (616 samples) ]

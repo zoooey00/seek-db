@@ -1,0 +1,93 @@
+{
+  "steps": [
+    {
+      "name": "build-integrated",
+      "exit_code": 0,
+      "elapsed_sec": 168.57078370199451,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+        "--build",
+        "/tmp/seekdb-fts-20261029/build",
+        "--target",
+        "seekdb",
+        "oceanbase",
+        "-j",
+        "3"
+      ]
+    },
+    {
+      "name": "strip-integrated",
+      "exit_code": 0,
+      "elapsed_sec": 1.3320692909983336,
+      "command": [
+        "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-objcopy",
+        "--strip-debug",
+        "/tmp/seekdb-fts-20261029/build/src/observer/seekdb",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-integrated"
+      ]
+    },
+    {
+      "name": "start-integrated",
+      "exit_code": 0,
+      "elapsed_sec": 5.923411470001156,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+        "--binary",
+        "/tmp/seekdb-fts-20261029/bin/seekdb-integrated",
+        "--label",
+        "integrated",
+        "--cpu-set",
+        "0,2"
+      ]
+    },
+    {
+      "name": "cpp-integrated",
+      "exit_code": 0,
+      "elapsed_sec": 8.557508366000548,
+      "command": [
+        "python3",
+        "/tmp/seekdb-fts-20261029/source/unittest/storage/fts/run_fts_cpp.py",
+        "--build-dir",
+        "/tmp/seekdb-fts-20261029/build",
+        "--output",
+        "/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/cpp-integrated"
+      ]
+    },
+    {
+      "name": "mysqltest-integrated",
+      "exit_code": 0,
+      "elapsed_sec": 6.557144091995724,
+      "command": [
+        "python3",
+        "/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/work/run_integrated_mysqltest.py",
+        "--label",
+        "integrated",
+        "--names",
+        "tokenize_function",
+        "parser_properties",
+        "parser_hot_path"
+      ]
+    },
+    {
+      "name": "sql-integrated",
+      "exit_code": 0,
+      "elapsed_sec": 11.140618776000338,
+      "command": [
+        "python3",
+        "/tmp/seekdb-fts-20261029/source/unittest/storage/fts/check_fts_sql.py",
+        "--mysql",
+        "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/obclient",
+        "--port",
+        "2901",
+        "--benchmark-results",
+        "--compare",
+        "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/baseline-sql-reference.json",
+        "--output",
+        "/mnt/d/codex11/2026-10-29/ubuntu-sql-ik-beng-ik-unicode/outputs/seekdb-fts/validation/sql-integrated"
+      ]
+    }
+  ],
+  "active": null,
+  "complete": true
+}

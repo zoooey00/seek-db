@@ -1,0 +1,128 @@
+[
+  {
+    "label": "pinned-before-1-start",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+      "--label",
+      "pinned-before-1",
+      "--binary",
+      "/tmp/seekdb-fts-20261029/bin/seekdb-before",
+      "--cpu-set",
+      "0,2"
+    ]
+  },
+  {
+    "label": "pinned-before-1",
+    "exit_code": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "4",
+      "bash",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "label": "pinned-before-1-fixed-score",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/pinned-before-1.txt",
+      "--json"
+    ]
+  },
+  {
+    "label": "pinned-after-1-start",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+      "--label",
+      "pinned-after-1",
+      "--binary",
+      "/tmp/seekdb-fts-20261029/bin/seekdb-after",
+      "--cpu-set",
+      "0,2"
+    ]
+  },
+  {
+    "label": "pinned-after-1",
+    "exit_code": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "4",
+      "bash",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "label": "pinned-after-1-fixed-score",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/pinned-after-1.txt",
+      "--json"
+    ]
+  },
+  {
+    "label": "pinned-after-2",
+    "exit_code": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "4",
+      "bash",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "label": "pinned-after-2-fixed-score",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/pinned-after-2.txt",
+      "--json"
+    ]
+  },
+  {
+    "label": "pinned-before-2-start",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/work/start_instance.py",
+      "--label",
+      "pinned-before-2",
+      "--binary",
+      "/tmp/seekdb-fts-20261029/bin/seekdb-before",
+      "--cpu-set",
+      "0,2"
+    ]
+  },
+  {
+    "label": "pinned-before-2",
+    "exit_code": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "4",
+      "bash",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "label": "pinned-before-2-fixed-score",
+    "exit_code": 0,
+    "command": [
+      "python3",
+      "/tmp/seekdb-fts-20261029/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/d/codex11/2026-10-29/seekdb-100-50-50-cpu-i/outputs/seekdb-fts/validation/pinned-before-2.txt",
+      "--json"
+    ]
+  }
+]
