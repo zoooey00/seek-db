@@ -16,6 +16,7 @@
 
 #define USING_LOG_PREFIX SQL_RESV
 #include "sql/resolver/ddl/ob_trigger_resolver.h"
+#include "sql/ai_column/ai_column.h"
 #include "sql/resolver/ddl/ob_trigger_source_builder.h"
 #include "sql/resolver/ddl/ob_create_routine_resolver.h"
 #include "sql/pl/parser/parse_stmt_item_type.h"
@@ -288,6 +289,10 @@ int ObTriggerResolver::resolve_trigger_source(const ParseNode &parse_node,
   OZ (resolve_schema_name(*parse_node.children_[0], trigger_arg.trigger_database_, trigger_name));
   OV (OB_NOT_NULL(session_info_));
   OV (OB_NOT_NULL(schema_checker_));
+  if(OB_SUCC(ret)&&session_info_->is_user_session()&&trigger_name.prefix_match(ai_column::HIDDEN_PREFIX)){
+    ret=OB_NOT_SUPPORTED;
+    LOG_USER_ERROR(OB_NOT_SUPPORTED,"the reserved AI column trigger namespace");
+  }
   OZ (trigger_arg.trigger_info_.set_trigger_name(trigger_name), trigger_name);
   trigger_body = ObString(parse_node.children_[1]->str_len_, parse_node.children_[1]->str_value_);
   OZ (ObSQLUtils::convert_sql_text_to_schema_for_storing(

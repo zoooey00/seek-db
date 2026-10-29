@@ -17,6 +17,7 @@
 #define USING_LOG_PREFIX SQL_ENG
 
 #include "sql/engine/dml/ob_trigger_handler.h"
+#include "sql/ai_column/ai_column.h"
 #include "sql/engine/expr/ob_expr_lob_utils.h"
 #include "sql/engine/dml/ob_table_update_op.h"
 #include "sql/ob_spi.h"
@@ -478,9 +479,19 @@ int TriggerHandle::check_and_update_new_row(
   ObEvalCtx &eval_ctx,
   const ObIArray<ObExpr *> &new_row_exprs,
   pl::ObPLRecord *new_record,
-  bool check)
+  bool check,
+  const ObTableSchema *protected_schema)
 {
   int ret = OB_SUCCESS;
+  std::vector<bool> protected_columns;
+  if(protected_schema){
+    for(auto it=protected_schema->column_begin();it!=protected_schema->column_end();++it)
+      if(*it&&ai_column::is_trigger_column(*protected_schema,**it))
+        protected_columns.push_back(ai_column::is_owned(**it));
+  }
+  auto protected_column=[&](int64_t index){
+    return index>=0&&index<static_cast<int64_t>(protected_columns.size())&&protected_columns[index];
+  };
   // plus 1 is for rowid
   if (OB_ISNULL(new_record)) {
     ret = OB_ERR_UNEXPECTED;
@@ -490,7 +501,7 @@ int TriggerHandle::check_and_update_new_row(
     ObObj *new_cells = new_record->get_element();
     for (int64_t i = 0; OB_SUCC(ret) && i < columns.get_count(); i++) {
       if (columns.get_flags()[i].is_rowid_) {
-      } else if (check) {
+      } else if (check || protected_column(i)) {
         ObDatum *datum;
         ObObj new_obj;
         if (OB_FAIL(new_row_exprs.at(i)->eval(eval_ctx, datum))) {
@@ -523,6 +534,10 @@ int TriggerHandle::check_and_update_new_row(
           }
           if (OB_FAIL(ret)) {
           } else if(!is_strict_equal) {
+            if(protected_column(i)){
+              ret=OB_NOT_SUPPORTED;
+              LOG_USER_ERROR(OB_NOT_SUPPORTED,"Direct assignment to AI result or state columns from a business trigger");
+            }
             updated = true;
           }
         }
@@ -622,7 +637,9 @@ int TriggerHandle::do_handle_before_row(
             ret = OB_NOT_INIT;
           } else {
             const ObTableModifySpec &modify_spec = static_cast<const ObTableModifySpec&>(dml_op.get_spec());
-            if (OB_FAIL(calc_before_row(dml_op, trig_rtdef, tg_arg.get_trigger_id()))) {
+            const ObTableSchema *protected_schema=nullptr;
+            if (OB_FAIL(ai_column::protected_trigger_table(dml_op.get_exec_ctx(),tg_arg.get_trigger_id(),protected_schema))) {
+            } else if (OB_FAIL(calc_before_row(dml_op, trig_rtdef, tg_arg.get_trigger_id()))) {
             } else if ((ObTriggerEvents::is_update_event(tg_event) ||
                   ObTriggerEvents::is_insert_event(tg_event))) {
                 if (OB_FAIL(check_and_update_new_row(&dml_op,
@@ -630,7 +647,8 @@ int TriggerHandle::do_handle_before_row(
                                               dml_op.get_eval_ctx(),
                                               trig_ctdef.new_row_exprs_,
                                               trig_rtdef.new_record_,
-                                              ObTriggerEvents::is_update_event(tg_event)))) {
+                                              ObTriggerEvents::is_update_event(tg_event),
+                                              protected_schema))) {
               }
             }
           }

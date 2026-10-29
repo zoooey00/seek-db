@@ -91,7 +91,8 @@ private:
                                       ObEvalCtx &eval_ctx,
                                       const ObIArray<ObExpr *> &new_row_exprs,
                                       pl::ObPLRecord *new_record,
-                                      bool check);
+                                      bool check,
+                                      const share::schema::ObTableSchema *protected_schema = nullptr);
   static int do_handle_rowid_before_row(ObTableModifyOp &dml_op,
                                         const ObTrigDMLCtDef &trig_ctdef,
                                         ObTrigDMLRtDef &trig_rtdef,

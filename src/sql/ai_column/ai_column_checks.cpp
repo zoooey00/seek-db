@@ -11,6 +11,7 @@
 #include "query/session/ob_inner_sql_connection_access.h"
 #include "common/mysqlclient/ob_mysql_proxy.h"
 #include "common/mysqlclient/ob_mysql_result.h"
+#include "share/schema/ob_trigger_info.h"
 #include <set>
 
 namespace oceanbase { namespace sql { namespace ai_column {
@@ -29,9 +30,17 @@ int check_write(ObResolverParams &params,const ObDMLStmt &stmt) {
   if(!params.schema_checker_)return OB_NOT_INIT;
   auto check=[&](const ObColumnRefRawExpr *expr)->int {
     if(!expr)return OB_SUCCESS;
-    const auto *table=stmt.get_table_item_by_id(expr->get_table_id());if(!table||!table->is_basic_table())return OB_SUCCESS;
+    const auto *table=stmt.get_table_item_by_id(expr->get_table_id());if(!table)return OB_SUCCESS;
+    uint64_t column_id=expr->get_column_id();
+    if(!table->is_basic_table()){
+      const auto *item=stmt.get_column_item_by_id(expr->get_table_id(),column_id);
+      if(!item||item->base_cid_==OB_INVALID_ID)return OB_SUCCESS;
+      column_id=item->base_cid_;
+      while(table->view_base_item_)table=table->view_base_item_;
+      if(!table->is_basic_table())return OB_SUCCESS;
+    }
     const ObTableSchema *schema=nullptr;int ret=params.schema_checker_->get_table_schema(table->ref_id_,schema);if(ret!=OB_SUCCESS)return ret;
-    const auto *column=schema?schema->get_column_schema(expr->get_column_id()):nullptr;
+    const auto *column=schema?schema->get_column_schema(column_id):nullptr;
     if(column&&is_owned(*column)){LOG_USER_ERROR(OB_NOT_SUPPORTED,"Direct assignment to AI result or state columns");return OB_NOT_SUPPORTED;}return OB_SUCCESS;
   };
   if(stmt.is_insert_stmt()){
@@ -42,6 +51,22 @@ int check_write(ObResolverParams &params,const ObDMLStmt &stmt) {
     const auto &update=static_cast<const ObUpdateStmt&>(stmt);
     for(int64_t i=0;i<update.get_update_table_info().count();++i){auto *table=update.get_update_table_info().at(i);if(table)for(int64_t j=0;j<table->assignments_.count();++j){const auto &assignment=table->assignments_.at(j);if(!assignment.is_implicit_){int ret=check(assignment.column_expr_);if(ret!=OB_SUCCESS)return ret;}}}
   }
+  return OB_SUCCESS;
+}
+int protected_trigger_table(ObExecContext &ctx,uint64_t trigger_id,const ObTableSchema *&table) {
+  table=nullptr;
+  if(!ctx.get_sql_ctx()||!ctx.get_sql_ctx()->schema_guard_)return OB_NOT_INIT;
+  auto &guard=*ctx.get_sql_ctx()->schema_guard_;
+  const ObTriggerInfo *trigger=nullptr;int ret=guard.get_trigger_info(trigger_id,trigger);
+  if(ret!=OB_SUCCESS)return ret;if(!trigger)return OB_ERR_UNEXPECTED;
+  const std::string name=string(trigger->get_trigger_name());
+  const std::string owned="__seekdb_ai_"+std::to_string(trigger->get_base_object_id());
+  if(name==owned+"_bi"||name==owned+"_bu")return OB_SUCCESS;
+  const ObTableSchema *schema=nullptr;
+  if((ret=guard.get_table_schema(trigger->get_base_object_id(),schema))!=OB_SUCCESS)return ret;
+  if(!schema)return OB_ERR_UNEXPECTED;
+  for(auto it=schema->column_begin();it!=schema->column_end();++it)
+    if(*it&&is_result(**it)){table=schema;break;}
   return OB_SUCCESS;
 }
 namespace {

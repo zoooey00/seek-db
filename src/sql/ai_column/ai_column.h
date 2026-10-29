@@ -44,5 +44,7 @@ int install(ObExecContext &ctx, const std::string &database, const std::string &
 int start_worker(common::ObMySQLProxy *proxy);
 void stop_worker();
 int check_write(ObResolverParams &params, const ObDMLStmt &stmt);
+int protected_trigger_table(ObExecContext &ctx, uint64_t trigger_id,
+                            const share::schema::ObTableSchema *&table);
 int check_strict(ObExecContext &ctx, const ObDMLStmt &stmt);
 } } }

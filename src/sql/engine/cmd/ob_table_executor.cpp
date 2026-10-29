@@ -888,7 +888,7 @@ int ObAlterTableExecutor::execute(ObExecContext &ctx, ObAlterTableStmt &stmt)
       "table_info", table_info_buffer,
       "schema_version", res.schema_version_);
     if (OB_SUCC(ret)) {
-      ret=ai_column::install(ctx,ai_column::string(stmt.get_org_database_name()),ai_column::string(stmt.get_org_table_name()));
+      ret=ai_column::install(ctx,ai_column::string(stmt.get_database_name()),ai_column::string(stmt.get_table_name()));
     }
     SQL_ENG_LOG(INFO, "finish alter table execute.", K(ret), "ddl_event_info", ObDDLEventInfo(GCTX.self_addr()), K(first_stmt));
   }

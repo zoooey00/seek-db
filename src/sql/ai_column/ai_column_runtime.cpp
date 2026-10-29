@@ -73,7 +73,7 @@ std::string scoped_prompt(const Definition &d) {
 std::string changed(const ObTableSchema &schema,const Definition &d) {
   std::set<std::string> names(d.dependencies.begin(),d.dependencies.end());const auto &key=schema.get_rowkey_info();
   for(int64_t i=0;i<key.get_size();++i){auto *c=schema.get_column_schema(key.get_column(i)->column_id_);if(c)names.insert(string(c->get_column_name_str()));}
-  std::string out="FALSE";for(const auto &name:names){std::string q=identifier(name);out+=" OR NOT(NEW."+q+" <=> OLD."+q+")";}return "("+out+")";
+  std::string out="FALSE";for(const auto &name:names){std::string q=identifier(name);out+=" OR NOT(CAST(NEW."+q+" AS BINARY) <=> CAST(OLD."+q+" AS BINARY))";}return "("+out+")";
 }
 int execute_ddl(common::sqlclient::ObISQLConnection &conn,const std::string &sql) {
   int64_t affected=0;int ret=conn.execute_write(ObString(sql.size(),sql.data()),affected);
