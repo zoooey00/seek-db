@@ -226,9 +226,15 @@ jobs:
           fi
           RUNTIME_DIR="${RUNNER_TEMP:-/tmp}/seekdb-mysqltest-runtime-${GITHUB_RUN_ID}"
           mkdir -p "$RUNTIME_DIR/obclient"
+          PARQUET_DECODER="$(dirname "$SEEKDB_BINARY")/libseekdb_file_parquet.so"
+          if [[ ! -f "$PARQUET_DECODER" ]]; then
+            echo "required Parquet decoder missing: $PARQUET_DECODER"
+            exit 1
+          fi
           cp -L -f "$SEEKDB_BINARY" "$RUNTIME_DIR/seekdb"
+          cp -L -f "$PARQUET_DECODER" "$RUNTIME_DIR/libseekdb_file_parquet.so"
           cp -a "$CLIENT_ROOT/." "$RUNTIME_DIR/obclient/"
-          tar -C "$RUNTIME_DIR" -cf - seekdb obclient | zstd -f -q -T0 -o seekdb-mysqltest-runtime.tar.zst
+          tar -C "$RUNTIME_DIR" -cf - seekdb libseekdb_file_parquet.so obclient | zstd -f -q -T0 -o seekdb-mysqltest-runtime.tar.zst
           echo "runtime size: $(stat -c%s seekdb-mysqltest-runtime.tar.zst 2>/dev/null || stat -f%z seekdb-mysqltest-runtime.tar.zst 2>/dev/null) bytes"
       # Runtime 与 run_attempt 无关：仅重跑失败 job 时 setup 可能跳过，因此优先使用稳定路径。
       - name: Persist mysqltest runtime to NFS

@@ -1,5 +1,8 @@
 """Focused build-entry and relocated Parquet payload regressions (Linux)."""
 import base64
+import io
+import tarfile
+import textwrap
 import os
 from pathlib import Path
 import shutil
@@ -82,6 +85,48 @@ class FileSqlDeliveryTest(unittest.TestCase):
         result = self.stage_deb(source, maintainer)
         self.assertNotEqual(0, result.returncode)
         self.assertIn("required package input is missing", result.stderr)
+
+    def stage_ci_runtime(self, include_decoder=True):
+        workspace = self.root / "ci-workspace"
+        workspace.mkdir()
+        binary = workspace / "build_release/src/observer/seekdb"
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"fixture-executable")
+        binary.chmod(0o755)
+        if include_decoder:
+            (binary.parent / "libseekdb_file_parquet.so").write_bytes(b"fixture-decoder")
+        clients = workspace / "deps/3rd/u01/obclient/bin"
+        clients.mkdir(parents=True)
+        for name in ("obclient", "mysqltest"):
+            (clients / name).write_bytes(b"fixture-client")
+            (clients / name).chmod(0o755)
+        workflow = (REPO / ".github/workflows/seekdb.yml").read_text()
+        step = workflow.split("      - name: Prepare mysqltest runtime\n", 1)[1]
+        commands = step.split("        run: |\n", 1)[1]
+        lines = []
+        for line in commands.splitlines():
+            if line and not line.startswith("          "):
+                break
+            lines.append(line)
+        environment = {**os.environ, "SEEKDB_BINARY_PATH": str(binary),
+                       "RUNNER_TEMP": str(self.root / "runner"), "GITHUB_RUN_ID": "fixture"}
+        result = subprocess.run(["bash", "-c", textwrap.dedent("\n".join(lines))],
+                                cwd=workspace, env=environment, capture_output=True, text=True)
+        return result, workspace / "seekdb-mysqltest-runtime.tar.zst"
+
+    def test_ci_runtime_archive_includes_decoder(self):
+        result, archive = self.stage_ci_runtime()
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        payload = subprocess.check_output(["zstd", "-d", "-q", "-c", str(archive)])
+        with tarfile.open(fileobj=io.BytesIO(payload)) as files:
+            self.assertEqual(b"fixture-executable", files.extractfile("seekdb").read())
+            self.assertEqual(b"fixture-decoder", files.extractfile("libseekdb_file_parquet.so").read())
+
+    def test_ci_runtime_rejects_missing_decoder(self):
+        result, archive = self.stage_ci_runtime(include_decoder=False)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("required Parquet decoder missing", result.stdout)
+        self.assertFalse(archive.exists())
 
     @unittest.skipUnless(os.environ.get("SEEKDB_PARQUET_LIBRARY"),
                          "set SEEKDB_PARQUET_LIBRARY to the built runtime decoder")
