@@ -1,0 +1,119 @@
+{
+  "plan": [
+    {
+      "block": 1,
+      "position": 1,
+      "version": "submitted",
+      "label": "b1-p1-submitted"
+    },
+    {
+      "block": 1,
+      "position": 2,
+      "version": "frequency",
+      "label": "b1-p2-frequency"
+    },
+    {
+      "block": 1,
+      "position": 3,
+      "version": "candidate",
+      "label": "b1-p3-candidate"
+    },
+    {
+      "block": 1,
+      "position": 4,
+      "version": "stopword",
+      "label": "b1-p4-stopword"
+    },
+    {
+      "block": 2,
+      "position": 1,
+      "version": "frequency",
+      "label": "b2-p1-frequency"
+    },
+    {
+      "block": 2,
+      "position": 2,
+      "version": "stopword",
+      "label": "b2-p2-stopword"
+    },
+    {
+      "block": 2,
+      "position": 3,
+      "version": "submitted",
+      "label": "b2-p3-submitted"
+    },
+    {
+      "block": 2,
+      "position": 4,
+      "version": "candidate",
+      "label": "b2-p4-candidate"
+    },
+    {
+      "block": 3,
+      "position": 1,
+      "version": "stopword",
+      "label": "b3-p1-stopword"
+    },
+    {
+      "block": 3,
+      "position": 2,
+      "version": "candidate",
+      "label": "b3-p2-candidate"
+    },
+    {
+      "block": 3,
+      "position": 3,
+      "version": "frequency",
+      "label": "b3-p3-frequency"
+    },
+    {
+      "block": 3,
+      "position": 4,
+      "version": "submitted",
+      "label": "b3-p4-submitted"
+    },
+    {
+      "block": 4,
+      "position": 1,
+      "version": "candidate",
+      "label": "b4-p1-candidate"
+    },
+    {
+      "block": 4,
+      "position": 2,
+      "version": "submitted",
+      "label": "b4-p2-submitted"
+    },
+    {
+      "block": 4,
+      "position": 3,
+      "version": "stopword",
+      "label": "b4-p3-stopword"
+    },
+    {
+      "block": 4,
+      "position": 4,
+      "version": "frequency",
+      "label": "b4-p4-frequency"
+    }
+  ],
+  "parameters": {
+    "rows": 20000,
+    "batch": 500,
+    "rounds": 3000,
+    "query_rounds": 200,
+    "samples": 3,
+    "warmup": 30,
+    "skip_load": 0
+  },
+  "server_cpus": "12,14",
+  "client_cpu": "10",
+  "cpu_count": 2,
+  "memory_limit": "2G",
+  "fresh_empty_data_directory_every_run": true,
+  "startup_settle_seconds": 20,
+  "regression_between_runs": false,
+  "discard_outliers": false,
+  "subtract_select1": false,
+  "other_services_untouched": true
+}

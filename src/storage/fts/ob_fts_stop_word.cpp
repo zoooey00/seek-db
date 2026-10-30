@@ -21,7 +21,6 @@
 #include "storage/fts/ob_fts_stop_word.h"
 #include "storage/fts/ob_fts_parser_helper.h"
 #include "storage/fts/ob_fts_parser_property.h"
-#include <algorithm>
 
 namespace oceanbase
 {
@@ -50,21 +49,14 @@ int ObStopWordChecker::init()
     stop_meta.set_collation_type(ObCollationType::CS_TYPE_UTF8MB4_GENERAL_CI);
 
     stopword_type_.set_meta(stop_meta);
-    ascii_key_count_ = 0;
     const int64_t stopword_count = sizeof(ob_stop_word_list) / sizeof(ob_stop_word_list[0]);
     for (int64_t i = 0; OB_SUCC(ret) && i < stopword_count; ++i) {
       ObFTWord stopword(STRLEN(ob_stop_word_list[i]), ob_stop_word_list[i], stopword_type_);
       if (OB_FAIL(stopword_set_.set_refactored(stopword))) {
-      } else {
-        uint64_t key = 0;
-        if (make_ascii_key(stopword.get_word().get_string(), key)) {
-          ascii_keys_[ascii_key_count_++] = key;
-        }
       }
     }
 
     if (OB_SUCC(ret)) {
-      std::sort(ascii_keys_, ascii_keys_ + ascii_key_count_);
       inited_ = true;
     }
   }
@@ -75,27 +67,8 @@ void ObStopWordChecker::destroy()
 {
   if (inited_) {
     stopword_set_.destroy();
-    ascii_key_count_ = 0;
     inited_ = false;
   }
-}
-
-bool ObStopWordChecker::make_ascii_key(const common::ObString &word, uint64_t &key)
-{
-  int64_t len = word.length();
-  // The target UTF8MB4_GENERAL_CI collation ignores trailing ASCII spaces.
-  while (len > 0 && word.ptr()[len - 1] == ' ') { --len; }
-  bool supported = len <= 7;
-  key = len;
-  for (int64_t i = 0; supported && i < len; ++i) {
-    const unsigned char c = static_cast<unsigned char>(word.ptr()[i]);
-    if (c >= 0x80) {
-      supported = false;
-    } else {
-      key = (key << 8) | (c >= 'A' && c <= 'Z' ? c + ('a' - 'A') : c);
-    }
-  }
-  return supported;
 }
 
 int ObStopWordChecker::check_stopword(const ObFTWord &word, bool &is_stopword)
@@ -103,22 +76,12 @@ int ObStopWordChecker::check_stopword(const ObFTWord &word, bool &is_stopword)
   int ret = OB_SUCCESS;
   
   
-  uint64_t ascii_key = 0;
+  common::ObArenaAllocator allocator(lib::ObMemAttr("ChkStopWord"));
   if (OB_UNLIKELY(!inited_)) {
     ret = OB_NOT_INIT;
   } else if (OB_UNLIKELY(word.empty())) {
     ret = OB_INVALID_ARGUMENT;
-  } else if (make_ascii_key(word.get_word().get_string(), ascii_key)
-             && ObCharset::is_valid_collation(word.get_collation_type())
-             && ObCharset::charset_type_by_coll(word.get_collation_type()) == CHARSET_UTF8MB4) {
-    // ASCII case folding and PAD SPACE comparison agree with the existing
-    // GENERAL_CI stopword set. Other encodings and non-ASCII retain its path.
-    const uint64_t *begin = ascii_keys_;
-    const uint64_t *end = begin + ascii_key_count_;
-    const uint64_t *found = std::lower_bound(begin, end, ascii_key);
-    is_stopword = found != end && *found == ascii_key;
   } else {
-    common::ObArenaAllocator allocator(lib::ObMemAttr("ChkStopWord"));
     common::ObString cmp_str;
     // do nothing set out with in if type is the same.
     if (OB_FAIL(common::ObCharset::charset_convert(
@@ -235,18 +198,20 @@ int ObAddWord::check_stopword(const ObFTWord &ft_word, bool &is_stopword)
 int ObAddWord::groupby_word(const ObFTWord &word, const int64_t word_freq)
 {
   int ret = OB_SUCCESS;
+  int64_t word_count = 0;
   if (OB_UNLIKELY(word.empty() || word_freq <= 0)) {
     ret = OB_INVALID_ARGUMENT;
   } else if (!flag_.groupby_word()) {
     if (OB_FAIL(word_map_.set_refactored(word, 1/*word count*/))) {
     }
+  } else if (OB_FAIL(word_map_.get_refactored(word, word_count)) && OB_HASH_NOT_EXIST != ret) {
   } else {
-    // Insert or update under one bucket lock, instead of hashing and looking
-    // up the same token twice. Keep the first occurrence's legacy count of 1.
-    auto add_frequency = [word_freq](common::hash::HashMapPair<ObFTWord, int64_t> &entry) {
-      entry.second += word_freq;
-    };
-    if (OB_FAIL(word_map_.set_or_update(word, 1/*first occurrence*/, add_frequency))) {
+    if (OB_HASH_NOT_EXIST == ret) {
+      word_count = 1;
+    } else {
+      word_count += word_freq;
+    }
+    if (OB_FAIL(word_map_.set_refactored(word, word_count, 1/*overwrite*/))) {
     }
   }
   return ret;

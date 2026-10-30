@@ -1,0 +1,112 @@
+[
+  {
+    "name": "b1-p1-original",
+    "exit_code": 0,
+    "seconds": 31.912683853999624
+  },
+  {
+    "name": "b1-p1-original-score",
+    "exit_code": 0,
+    "seconds": 0.12239597200095886
+  },
+  {
+    "name": "b1-p2-selected",
+    "exit_code": 0,
+    "seconds": 30.350990047998494
+  },
+  {
+    "name": "b1-p2-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07298058500236948
+  },
+  {
+    "name": "b2-p1-selected",
+    "exit_code": 0,
+    "seconds": 28.49741785000151
+  },
+  {
+    "name": "b2-p1-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07053425300182425
+  },
+  {
+    "name": "b2-p2-original",
+    "exit_code": 0,
+    "seconds": 28.75296964300287
+  },
+  {
+    "name": "b2-p2-original-score",
+    "exit_code": 0,
+    "seconds": 0.07423295300031896
+  },
+  {
+    "name": "b3-p1-selected",
+    "exit_code": 0,
+    "seconds": 34.77597685699948
+  },
+  {
+    "name": "b3-p1-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07135796699731145
+  },
+  {
+    "name": "b3-p2-original",
+    "exit_code": 0,
+    "seconds": 34.377844835998985
+  },
+  {
+    "name": "b3-p2-original-score",
+    "exit_code": 0,
+    "seconds": 0.07167479100098717
+  },
+  {
+    "name": "b4-p1-original",
+    "exit_code": 0,
+    "seconds": 31.56820473800326
+  },
+  {
+    "name": "b4-p1-original-score",
+    "exit_code": 0,
+    "seconds": 0.07486598900140962
+  },
+  {
+    "name": "b4-p2-selected",
+    "exit_code": 0,
+    "seconds": 31.011149900001328
+  },
+  {
+    "name": "b4-p2-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07071656799962511
+  },
+  {
+    "name": "sql-selected",
+    "exit_code": 0,
+    "seconds": 4.683109867000894
+  },
+  {
+    "name": "sql-original",
+    "exit_code": 0,
+    "seconds": 4.339020528997935
+  },
+  {
+    "name": "mysqltest-tokenize_function",
+    "exit_code": 0,
+    "seconds": 0.5986622609998449
+  },
+  {
+    "name": "mysqltest-parser_properties",
+    "exit_code": 0,
+    "seconds": 1.6884608140026103
+  },
+  {
+    "name": "mysqltest-parser_hot_path",
+    "exit_code": 0,
+    "seconds": 1.9956253679993097
+  },
+  {
+    "name": "mysqltest-simple_query",
+    "exit_code": 0,
+    "seconds": 1.7893113990030542
+  }
+]

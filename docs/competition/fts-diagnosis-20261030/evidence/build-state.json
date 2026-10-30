@@ -1,0 +1,47 @@
+[
+  {
+    "name": "build-frequency",
+    "exit_code": 0,
+    "seconds": 45.49993538099807
+  },
+  {
+    "name": "strip-frequency",
+    "exit_code": 0,
+    "seconds": 1.858873486999073
+  },
+  {
+    "name": "cpp-frequency",
+    "exit_code": 0,
+    "seconds": 9.299821738000901
+  },
+  {
+    "name": "build-stopword",
+    "exit_code": 0,
+    "seconds": 53.844150155000534
+  },
+  {
+    "name": "strip-stopword",
+    "exit_code": 0,
+    "seconds": 0.7380216359997576
+  },
+  {
+    "name": "cpp-stopword",
+    "exit_code": 0,
+    "seconds": 8.352525741000136
+  },
+  {
+    "name": "build-candidate",
+    "exit_code": 0,
+    "seconds": 28.969705809002335
+  },
+  {
+    "name": "strip-candidate",
+    "exit_code": 0,
+    "seconds": 0.8222325460010325
+  },
+  {
+    "name": "cpp-candidate",
+    "exit_code": 0,
+    "seconds": 10.937167226999009
+  }
+]

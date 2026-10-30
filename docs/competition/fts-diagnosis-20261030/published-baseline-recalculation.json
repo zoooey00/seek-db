@@ -1,0 +1,84 @@
+{
+  "submitted_commit": "965b5d35ec36218bffd2ece8442b2bf8038d4c9a",
+  "platform_reported_mean_improvement": -0.02499664610807118,
+  "platform_reported_raw_score": 0.0,
+  "published_baseline_sha256": "f4e97eddb2e49c982b967fc8047f7cf37177eebe53d648f6746d85aacda91f0c",
+  "published_scorer_sha256": "bea52eb1c68d05693bb3ac5b910ab0e2fa0e70e01582f40466898ee1e2e3ef55",
+  "recalculated_with_published_baseline": {
+    "score": 100.0,
+    "mean_improvement": 0.8609521770732851,
+    "full_score_improvement": 0.5,
+    "categories": {
+      "build": {
+        "improvement": 0.7859024778240615,
+        "metrics": [
+          {
+            "metric": "build_ik_all_sec",
+            "baseline": 35.2836,
+            "current": 8.67,
+            "improvement": 0.7542767744787946
+          },
+          {
+            "metric": "build_ik_content_sec",
+            "baseline": 28.3764,
+            "current": 5.629,
+            "improvement": 0.8016309327469305
+          },
+          {
+            "metric": "build_beng_en_sec",
+            "baseline": 14.7578,
+            "current": 2.925,
+            "improvement": 0.8017997262464595
+          }
+        ]
+      },
+      "tokenize": {
+        "improvement": 0.8960334259774059,
+        "metrics": [
+          {
+            "metric": "tokenize_ik_avg_ms",
+            "baseline": 0.76478,
+            "current": 0.0794,
+            "improvement": 0.8961792933915635
+          },
+          {
+            "metric": "tokenize_beng_avg_ms",
+            "baseline": 0.42262,
+            "current": 0.044,
+            "improvement": 0.8958875585632483
+          }
+        ]
+      },
+      "query": {
+        "improvement": 0.9009206274183877,
+        "metrics": [
+          {
+            "metric": "query_cn_avg_ms",
+            "baseline": 16.66282,
+            "current": 1.487,
+            "improvement": 0.9107594032702748
+          },
+          {
+            "metric": "query_beng_avg_ms",
+            "baseline": 24.30424,
+            "current": 2.239,
+            "improvement": 0.9078761565883154
+          },
+          {
+            "metric": "query_mixed_avg_ms",
+            "baseline": 17.55928,
+            "current": 1.6923,
+            "improvement": 0.9036236109908835
+          },
+          {
+            "metric": "query_limit_avg_ms",
+            "baseline": 16.23338,
+            "current": 1.9249,
+            "improvement": 0.8814233388240772
+          }
+        ]
+      }
+    }
+  },
+  "conclusion": "The platform summary cannot be reproduced from the published baseline and scorer using these metrics. Actual platform scoring inputs remain unavailable."
+}

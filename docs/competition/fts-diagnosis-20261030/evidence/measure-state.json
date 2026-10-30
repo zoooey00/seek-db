@@ -1,0 +1,177 @@
+[
+  {
+    "name": "b1-p1-submitted",
+    "exit_code": 0,
+    "seconds": 29.16839581900058
+  },
+  {
+    "name": "b1-p1-submitted-score",
+    "exit_code": 0,
+    "seconds": 0.07147301200166112
+  },
+  {
+    "name": "b1-p2-frequency",
+    "exit_code": 0,
+    "seconds": 31.246227534000354
+  },
+  {
+    "name": "b1-p2-frequency-score",
+    "exit_code": 0,
+    "seconds": 0.07606555000165827
+  },
+  {
+    "name": "b1-p3-candidate",
+    "exit_code": 0,
+    "seconds": 30.58189983199918
+  },
+  {
+    "name": "b1-p3-candidate-score",
+    "exit_code": 0,
+    "seconds": 0.07174246899739956
+  },
+  {
+    "name": "b1-p4-stopword",
+    "exit_code": 0,
+    "seconds": 31.62809867100077
+  },
+  {
+    "name": "b1-p4-stopword-score",
+    "exit_code": 0,
+    "seconds": 0.06902761700257543
+  },
+  {
+    "name": "b2-p1-frequency",
+    "exit_code": 0,
+    "seconds": 29.264328535002278
+  },
+  {
+    "name": "b2-p1-frequency-score",
+    "exit_code": 0,
+    "seconds": 0.07278608200067538
+  },
+  {
+    "name": "b2-p2-stopword",
+    "exit_code": 0,
+    "seconds": 29.361329971998202
+  },
+  {
+    "name": "b2-p2-stopword-score",
+    "exit_code": 0,
+    "seconds": 0.0711560730014753
+  },
+  {
+    "name": "b2-p3-submitted",
+    "exit_code": 0,
+    "seconds": 29.881727443000273
+  },
+  {
+    "name": "b2-p3-submitted-score",
+    "exit_code": 0,
+    "seconds": 0.07172192999860272
+  },
+  {
+    "name": "b2-p4-candidate",
+    "exit_code": 0,
+    "seconds": 30.030016402997717
+  },
+  {
+    "name": "b2-p4-candidate-score",
+    "exit_code": 0,
+    "seconds": 0.0745231929977308
+  },
+  {
+    "name": "b3-p1-stopword",
+    "exit_code": 0,
+    "seconds": 29.421665591002238
+  },
+  {
+    "name": "b3-p1-stopword-score",
+    "exit_code": 0,
+    "seconds": 0.07074730699969223
+  },
+  {
+    "name": "b3-p2-candidate",
+    "exit_code": 0,
+    "seconds": 29.2330143040017
+  },
+  {
+    "name": "b3-p2-candidate-score",
+    "exit_code": 0,
+    "seconds": 0.07105887400030042
+  },
+  {
+    "name": "b3-p3-frequency",
+    "exit_code": 0,
+    "seconds": 29.519268833999377
+  },
+  {
+    "name": "b3-p3-frequency-score",
+    "exit_code": 0,
+    "seconds": 0.07066847100213636
+  },
+  {
+    "name": "b3-p4-submitted",
+    "exit_code": 0,
+    "seconds": 29.415027328999713
+  },
+  {
+    "name": "b3-p4-submitted-score",
+    "exit_code": 0,
+    "seconds": 0.0721900780008582
+  },
+  {
+    "name": "b4-p1-candidate",
+    "exit_code": 0,
+    "seconds": 26.11156660800043
+  },
+  {
+    "name": "b4-p1-candidate-score",
+    "exit_code": 0,
+    "seconds": 0.07903007999993861
+  },
+  {
+    "name": "b4-p2-submitted",
+    "exit_code": 0,
+    "seconds": 26.611909444000048
+  },
+  {
+    "name": "b4-p2-submitted-score",
+    "exit_code": 0,
+    "seconds": 0.08655125400036923
+  },
+  {
+    "name": "b4-p3-stopword",
+    "exit_code": 0,
+    "seconds": 26.257699833000515
+  },
+  {
+    "name": "b4-p3-stopword-score",
+    "exit_code": 0,
+    "seconds": 0.07397010900240275
+  },
+  {
+    "name": "b4-p4-frequency",
+    "exit_code": 0,
+    "seconds": 25.964076185999147
+  },
+  {
+    "name": "b4-p4-frequency-score",
+    "exit_code": 0,
+    "seconds": 0.0940928210002312
+  },
+  {
+    "name": "sql-frequency",
+    "exit_code": 0,
+    "seconds": 4.439080864998687
+  },
+  {
+    "name": "sql-stopword",
+    "exit_code": 0,
+    "seconds": 4.547271475999878
+  },
+  {
+    "name": "sql-candidate",
+    "exit_code": 0,
+    "seconds": 4.843868914998893
+  }
+]

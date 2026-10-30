@@ -1,0 +1,192 @@
+[
+  {
+    "name": "b1-p1-original",
+    "exit_code": 0,
+    "seconds": 29.90635354499682
+  },
+  {
+    "name": "b1-p1-original-score",
+    "exit_code": 0,
+    "seconds": 0.07276089099468663
+  },
+  {
+    "name": "b1-p2-selected",
+    "exit_code": 0,
+    "seconds": 28.89448216999881
+  },
+  {
+    "name": "b1-p2-selected-score",
+    "exit_code": 0,
+    "seconds": 0.08344170200143708
+  },
+  {
+    "name": "b1-p3-ik_only",
+    "exit_code": 0,
+    "seconds": 31.90732526800275
+  },
+  {
+    "name": "b1-p3-ik_only-score",
+    "exit_code": 0,
+    "seconds": 0.06958900600147899
+  },
+  {
+    "name": "b2-p1-ik_only",
+    "exit_code": 0,
+    "seconds": 30.378204923996236
+  },
+  {
+    "name": "b2-p1-ik_only-score",
+    "exit_code": 0,
+    "seconds": 0.07131838399800472
+  },
+  {
+    "name": "b2-p2-selected",
+    "exit_code": 0,
+    "seconds": 38.50200857899472
+  },
+  {
+    "name": "b2-p2-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07192269700317411
+  },
+  {
+    "name": "b2-p3-original",
+    "exit_code": 0,
+    "seconds": 33.42684715500218
+  },
+  {
+    "name": "b2-p3-original-score",
+    "exit_code": 0,
+    "seconds": 0.06975432499893941
+  },
+  {
+    "name": "b3-p1-selected",
+    "exit_code": 0,
+    "seconds": 31.809704236999096
+  },
+  {
+    "name": "b3-p1-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07185310500062769
+  },
+  {
+    "name": "b3-p2-original",
+    "exit_code": 0,
+    "seconds": 28.9984254459996
+  },
+  {
+    "name": "b3-p2-original-score",
+    "exit_code": 0,
+    "seconds": 0.07259284800238675
+  },
+  {
+    "name": "b3-p3-ik_only",
+    "exit_code": 0,
+    "seconds": 28.95595223699638
+  },
+  {
+    "name": "b3-p3-ik_only-score",
+    "exit_code": 0,
+    "seconds": 0.07122362199879717
+  },
+  {
+    "name": "b4-p1-ik_only",
+    "exit_code": 0,
+    "seconds": 31.456616711002425
+  },
+  {
+    "name": "b4-p1-ik_only-score",
+    "exit_code": 0,
+    "seconds": 0.07637742400402203
+  },
+  {
+    "name": "b4-p2-original",
+    "exit_code": 0,
+    "seconds": 33.775063756002055
+  },
+  {
+    "name": "b4-p2-original-score",
+    "exit_code": 0,
+    "seconds": 0.07352658599847928
+  },
+  {
+    "name": "b4-p3-selected",
+    "exit_code": 0,
+    "seconds": 30.013409507999313
+  },
+  {
+    "name": "b4-p3-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07150507099868264
+  },
+  {
+    "name": "b5-p1-selected",
+    "exit_code": 0,
+    "seconds": 28.902835038003104
+  },
+  {
+    "name": "b5-p1-selected-score",
+    "exit_code": 0,
+    "seconds": 0.0728098699983093
+  },
+  {
+    "name": "b5-p2-ik_only",
+    "exit_code": 0,
+    "seconds": 28.650807322999754
+  },
+  {
+    "name": "b5-p2-ik_only-score",
+    "exit_code": 0,
+    "seconds": 0.07228382200264605
+  },
+  {
+    "name": "b5-p3-original",
+    "exit_code": 0,
+    "seconds": 29.20254002800357
+  },
+  {
+    "name": "b5-p3-original-score",
+    "exit_code": 0,
+    "seconds": 0.07480671600205824
+  },
+  {
+    "name": "b6-p1-original",
+    "exit_code": 0,
+    "seconds": 31.407569158000115
+  },
+  {
+    "name": "b6-p1-original-score",
+    "exit_code": 0,
+    "seconds": 0.07076505999430083
+  },
+  {
+    "name": "b6-p2-ik_only",
+    "exit_code": 0,
+    "seconds": 36.00613360799616
+  },
+  {
+    "name": "b6-p2-ik_only-score",
+    "exit_code": 0,
+    "seconds": 0.07153128200297942
+  },
+  {
+    "name": "b6-p3-selected",
+    "exit_code": 0,
+    "seconds": 32.81337417600298
+  },
+  {
+    "name": "b6-p3-selected-score",
+    "exit_code": 0,
+    "seconds": 0.07220426099956967
+  },
+  {
+    "name": "sql-selected",
+    "exit_code": 0,
+    "seconds": 8.493451116002689
+  },
+  {
+    "name": "sql-ik_only",
+    "exit_code": 0,
+    "seconds": 8.253904857003363
+  }
+]

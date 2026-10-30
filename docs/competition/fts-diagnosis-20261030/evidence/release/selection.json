@@ -1,0 +1,21 @@
+{
+  "choice": "selected",
+  "measured_binary_sha256": "8223c112ab56576470121b250fce34444bfb4fb4c24bbd57adf93da08c9f27e5",
+  "rebuilt_binary_sha256": "8223c112ab56576470121b250fce34444bfb4fb4c24bbd57adf93da08c9f27e5",
+  "sources": {
+    "src/share/text_analysis/ob_text_analyzer.cpp": "cd28be4350e1d426ad3af289cdf408d9fb5696a4b86a517e349f39c4f4028391",
+    "src/share/text_analysis/ob_text_analyzer.h": "737267cebabf091a31d60c3a9845c20fac12999e319581f5e5aa672a189148b1",
+    "src/share/text_analysis/ob_token_stream.cpp": "5d483789f7b3f79d4782ab82f8e0c76f38aba412f378af66abfefed20d3f3045",
+    "src/share/text_analysis/ob_token_stream.h": "4c0222c20457cbbfd9d98e0869afb1c486d5bc6229fb1416809e243b16ca7d0d",
+    "src/storage/fts/dict/ob_ft_range_dict.cpp": "ffe1e32044723193236b4130f8c2da26755a00a20cc6bd5506ccacb6e7f74e66",
+    "src/storage/fts/dict/ob_ft_range_dict.h": "16e180a4bfdb5ce0380ad178484b735a285d7bb91cbe392aea5c7bfcd3f9f158",
+    "src/storage/fts/ik/ob_ik_arbitrator.cpp": "8ab8cca820be32cb1e41410138f13e04ac9a9927ed57820281234cbbdad71035",
+    "src/storage/fts/ik/ob_ik_arbitrator.h": "6bc96e715f3389ce2e757ca000fc807c37104d75022b64028ec9dbb8f1326f70",
+    "src/storage/fts/ik/ob_ik_char_util.h": "d0c7ae675d397805998aa30664486b5a199bfaf01bbacc7c3afd0d2c6f245cdf",
+    "src/storage/fts/ik/ob_ik_processor.cpp": "942a29aeabf76e267d5a0b3a032c4096696313a14107fbfb3c22c365c981d246",
+    "src/storage/fts/ob_beng_ft_parser.cpp": "34b6f6736ca2d305dba0194e78b071010df73e1d6ee67546aec14964d4896ec6",
+    "src/storage/fts/ob_ik_ft_parser.cpp": "7966ac722989f39041c5acd6bfa53b63000863bf16c4c619e378ba697e342705",
+    "src/storage/fts/ob_fts_stop_word.cpp": "467903a9f748d2e7e31aee0840a0cabddfba01932ef8f08ece82a80ac6967009",
+    "src/storage/fts/ob_fts_stop_word.h": "9c33dff2a4d0c80f030ee99105f28652924aba10c4a72a839d1008a1c8ef591f"
+  }
+}

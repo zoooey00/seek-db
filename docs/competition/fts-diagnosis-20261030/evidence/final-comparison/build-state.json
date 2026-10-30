@@ -1,0 +1,27 @@
+[
+  {
+    "name": "build-original",
+    "exit_code": 0,
+    "seconds": 65.05967215000055
+  },
+  {
+    "name": "strip-original",
+    "exit_code": 0,
+    "seconds": 1.5276781920001667
+  },
+  {
+    "name": "build-selected",
+    "exit_code": 0,
+    "seconds": 64.61066322899933
+  },
+  {
+    "name": "strip-selected",
+    "exit_code": 0,
+    "seconds": 0.782001024002966
+  },
+  {
+    "name": "cpp-selected",
+    "exit_code": 0,
+    "seconds": 8.893714391000685
+  }
+]

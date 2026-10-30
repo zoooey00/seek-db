@@ -1,0 +1,17 @@
+[
+  {
+    "name": "build-release",
+    "exit_code": 0,
+    "seconds": 73.1618880399983
+  },
+  {
+    "name": "strip-release",
+    "exit_code": 0,
+    "seconds": 1.2628875029986375
+  },
+  {
+    "name": "cpp-release",
+    "exit_code": 0,
+    "seconds": 9.909778391003783
+  }
+]

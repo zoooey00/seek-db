@@ -1,0 +1,44 @@
+{
+  "original": {
+    "binary": "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-original-final",
+    "sha256": "77fd38cf247e413112a6e32b6f4a90c8351f47f3f41d2d17afdacc19e75e0579",
+    "production_commit": "02fb66c1d41e637a2f4aba7fe050e6028b6f23ef",
+    "sources": {
+      "src/share/text_analysis/ob_text_analyzer.cpp": "92a426f606a876567d49b109c5978bce582ed7a2dfd4fd9ecde1830a20c8bc93",
+      "src/share/text_analysis/ob_text_analyzer.h": "ce21948286454c0c26f5c9ababc8483e1dc241ee2f87bdb3085f84957944619d",
+      "src/share/text_analysis/ob_token_stream.cpp": "5f73c83ed4648f2d9cf7b5a136f0b1f806c82e20048587cf22a9daa1d952e0ab",
+      "src/share/text_analysis/ob_token_stream.h": "db86f9a91d43703ada82a2bc8a9640a694d1afdb63a940249ed94c7f58c1935e",
+      "src/storage/fts/dict/ob_ft_range_dict.cpp": "9e438e3f0dc83e576542fce433e1776a901a9f9d8e328d61940aa49276086f99",
+      "src/storage/fts/dict/ob_ft_range_dict.h": "4fbead4ec4569d834ba9f12ac0852c7324a0fabcbae16435403ccde0bfd24b80",
+      "src/storage/fts/ik/ob_ik_arbitrator.cpp": "5c77c4b9fda5f5735c0cbf45b2321424f4712242e991d1426083d0f6a323cf6e",
+      "src/storage/fts/ik/ob_ik_arbitrator.h": "88b2f5f436513e64f783a87e5de48ed5751847b09724dc836d404e429fe51dce",
+      "src/storage/fts/ik/ob_ik_char_util.h": "d26f03bfb9eb494a5259e1345744369473d7de0b781831e0492d16add2db6ca8",
+      "src/storage/fts/ik/ob_ik_processor.cpp": "51bb8f44736747f30c0549d91fe4bae80e2136bdc47e920427fb9e094eb03704",
+      "src/storage/fts/ob_beng_ft_parser.cpp": "570b38253680a8c58d4df09e2f9e0252d9efd358acec10ee7b523f91305e63ac",
+      "src/storage/fts/ob_ik_ft_parser.cpp": "b9cdf667edccf1ed28bbc1c596995990dea33caabb3ba822a5b2d95fcba2f685",
+      "src/storage/fts/ob_fts_stop_word.cpp": "467903a9f748d2e7e31aee0840a0cabddfba01932ef8f08ece82a80ac6967009",
+      "src/storage/fts/ob_fts_stop_word.h": "9c33dff2a4d0c80f030ee99105f28652924aba10c4a72a839d1008a1c8ef591f"
+    }
+  },
+  "selected": {
+    "binary": "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-selected-final",
+    "sha256": "8223c112ab56576470121b250fce34444bfb4fb4c24bbd57adf93da08c9f27e5",
+    "production_commit": "965b5d35ec36218bffd2ece8442b2bf8038d4c9a",
+    "sources": {
+      "src/share/text_analysis/ob_text_analyzer.cpp": "cd28be4350e1d426ad3af289cdf408d9fb5696a4b86a517e349f39c4f4028391",
+      "src/share/text_analysis/ob_text_analyzer.h": "737267cebabf091a31d60c3a9845c20fac12999e319581f5e5aa672a189148b1",
+      "src/share/text_analysis/ob_token_stream.cpp": "5d483789f7b3f79d4782ab82f8e0c76f38aba412f378af66abfefed20d3f3045",
+      "src/share/text_analysis/ob_token_stream.h": "4c0222c20457cbbfd9d98e0869afb1c486d5bc6229fb1416809e243b16ca7d0d",
+      "src/storage/fts/dict/ob_ft_range_dict.cpp": "ffe1e32044723193236b4130f8c2da26755a00a20cc6bd5506ccacb6e7f74e66",
+      "src/storage/fts/dict/ob_ft_range_dict.h": "16e180a4bfdb5ce0380ad178484b735a285d7bb91cbe392aea5c7bfcd3f9f158",
+      "src/storage/fts/ik/ob_ik_arbitrator.cpp": "8ab8cca820be32cb1e41410138f13e04ac9a9927ed57820281234cbbdad71035",
+      "src/storage/fts/ik/ob_ik_arbitrator.h": "6bc96e715f3389ce2e757ca000fc807c37104d75022b64028ec9dbb8f1326f70",
+      "src/storage/fts/ik/ob_ik_char_util.h": "d0c7ae675d397805998aa30664486b5a199bfaf01bbacc7c3afd0d2c6f245cdf",
+      "src/storage/fts/ik/ob_ik_processor.cpp": "942a29aeabf76e267d5a0b3a032c4096696313a14107fbfb3c22c365c981d246",
+      "src/storage/fts/ob_beng_ft_parser.cpp": "34b6f6736ca2d305dba0194e78b071010df73e1d6ee67546aec14964d4896ec6",
+      "src/storage/fts/ob_ik_ft_parser.cpp": "7966ac722989f39041c5acd6bfa53b63000863bf16c4c619e378ba697e342705",
+      "src/storage/fts/ob_fts_stop_word.cpp": "467903a9f748d2e7e31aee0840a0cabddfba01932ef8f08ece82a80ac6967009",
+      "src/storage/fts/ob_fts_stop_word.h": "9c33dff2a4d0c80f030ee99105f28652924aba10c4a72a839d1008a1c8ef591f"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "name": "sql-release",
+    "exit_code": 0,
+    "seconds": 9.110479650000343
+  },
+  {
+    "name": "mysqltest-tokenize_function",
+    "exit_code": 0,
+    "seconds": 0.6735945789987454
+  },
+  {
+    "name": "mysqltest-parser_properties",
+    "exit_code": 0,
+    "seconds": 3.284414542999002
+  },
+  {
+    "name": "mysqltest-parser_hot_path",
+    "exit_code": 0,
+    "seconds": 6.064560063001409
+  },
+  {
+    "name": "mysqltest-simple_query",
+    "exit_code": 0,
+    "seconds": 2.248372513000504
+  }
+]

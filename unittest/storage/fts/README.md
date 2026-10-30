@@ -18,10 +18,14 @@ It checks initialization, destruction and reinitialization, plus frequency
 updates under collisions and binary/case-insensitive collations.
 
 After compiling the test executable, `--test-stopwords` runs just the stopword
-and frequency checks. `--benchmark-stopwords` measures thread CPU time in ABBA
-order for ASCII hits, ASCII misses and fallback inputs separately; it checks
-that hit counts agree. `--benchmark-word-map` measures the frequency update.
-These operation-level measurements do not measure complete SQL query latency.
+and frequency checks. `--benchmark-stopwords` compares the current production
+checker with the independent legacy oracle using thread CPU time in ABBA order
+for ASCII hits, ASCII misses and fallback inputs; it checks that hit counts agree.
+`--benchmark-word-map` compares two hash-map APIs as an isolated experiment,
+independently of which API production uses. Neither experiment measures complete
+SQL query latency. The one-pass frequency update and ASCII stopword index were
+withdrawn after the balanced full-server experiment did not establish a benefit;
+their semantic regression coverage remains.
 
 Build this checkout with `CMAKE_EXPORT_COMPILE_COMMANDS=ON`, including the
 `seekdb` and `oceanbase` targets, then run:

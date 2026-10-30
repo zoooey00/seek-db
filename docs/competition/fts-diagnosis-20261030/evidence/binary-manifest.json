@@ -1,0 +1,32 @@
+{
+  "frequency": {
+    "source": {
+      "src/storage/fts/ob_fts_stop_word.cpp": "ac3b0d4c1e40671cbf3f22d311297b6dd13dac1a71962354c9bca388ce4260fe",
+      "src/storage/fts/ob_fts_stop_word.h": "9c33dff2a4d0c80f030ee99105f28652924aba10c4a72a839d1008a1c8ef591f"
+    },
+    "binary": "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-frequency-diagnosis",
+    "sha256": "2fbae8b4f55d921304da160812a3cefc6c2a58782c97c7083198c70477d20873"
+  },
+  "stopword": {
+    "source": {
+      "src/storage/fts/ob_fts_stop_word.cpp": "4a7fda051dfd5c67d8445667276f415d9394a1c9d55be7922f245770b2213a35",
+      "src/storage/fts/ob_fts_stop_word.h": "819a5432c671e748287d124daa99870d087275f6f5dcbcb67748464e76bb44f1"
+    },
+    "binary": "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-stopword-diagnosis",
+    "sha256": "80039164da0b07dc9f3594e17778486e0dd120d1783631836c417b7cd905674e"
+  },
+  "candidate": {
+    "source": {
+      "src/storage/fts/ob_fts_stop_word.cpp": "ff7ced55d711bd72c25859f70133e0173f5888f86388d619d310410ace599050",
+      "src/storage/fts/ob_fts_stop_word.h": "819a5432c671e748287d124daa99870d087275f6f5dcbcb67748464e76bb44f1"
+    },
+    "binary": "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-candidate-diagnosis",
+    "sha256": "a240b24b3c79d0b472b8476f45e40e2533bd40f60cefde65128354fcd50f0d17",
+    "commit": "0668450b7a85a293cd41150d5771f9bfe034ce97"
+  },
+  "submitted": {
+    "binary": "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-submitted",
+    "sha256": "8223c112ab56576470121b250fce34444bfb4fb4c24bbd57adf93da08c9f27e5",
+    "commit": "965b5d35ec36218bffd2ece8442b2bf8038d4c9a"
+  }
+}

@@ -312,7 +312,7 @@ static void test_word_frequency_updates()
     require(add.process_word("word", 4, 4, 0) == OB_INVALID_ARGUMENT,
             "invalid frequency must be rejected");
   }
-  std::puts("PASS one-pass word frequency updates: collisions, grouped frequencies and collations");
+  std::puts("PASS word frequency semantics: collisions, grouped frequencies and collations");
 }
 
 // Independent oracle: retain the original conversion and collation-aware set.
@@ -443,14 +443,14 @@ static void benchmark_stopwords()
   constexpr int rounds = 5000000;
   for (size_t w = 0; w < workloads.size(); ++w) {
     int64_t expected_hits = -1;
-    for (const bool fast : {false, true, true, false}) {
+    for (const bool current : {false, true, true, false}) {
       int64_t hits = 0;
       const double cpu_start = thread_cpu_seconds();
       for (int i = 0; i < rounds; ++i) {
         const auto &text = workloads[w][i % workloads[w].size()];
         ObFTWord word(text.size(), text.data(), meta);
         bool found = false;
-        const int ret = fast ? checker.check_stopword(word, found) : oracle.check(word, found);
+        const int ret = current ? checker.check_stopword(word, found) : oracle.check(word, found);
         require(ret == OB_SUCCESS, "stopword benchmark failed");
         hits += found;
       }
@@ -458,7 +458,7 @@ static void benchmark_stopwords()
       if (expected_hits < 0) { expected_hits = hits; }
       require(hits == expected_hits, "stopword benchmark result changed");
       std::printf("STOPWORD workload=%s method=%s operations=%d cpu_sec=%.6f hits=%ld\n",
-                  names[w], fast ? "indexed" : "legacy", rounds, cpu, hits);
+                  names[w], current ? "current" : "legacy", rounds, cpu, hits);
     }
   }
 }
@@ -472,7 +472,7 @@ static void benchmark_word_map_updates()
   tokens.reserve(1024);
   for (int i = 0; i < 1024; ++i) { tokens.push_back("frequency_word_" + std::to_string(i)); }
   constexpr int rounds = 500000;
-  // Isolate the changed hash-map operation from SQL, network and JSON costs.
+  // Compare two hash-map APIs independently of the production implementation.
   // ABBA order and a thread CPU clock reduce sensitivity to host scheduling.
   for (const bool single_pass : {false, true, true, false}) {
     ObFTWordMap words;
