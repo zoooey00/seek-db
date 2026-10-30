@@ -1,0 +1,81 @@
+[
+  {
+    "name": "configure-exact",
+    "exit_code": 0,
+    "elapsed_sec": 6.019239166999796,
+    "command": [
+      "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+      "-S",
+      "/var/tmp/seekdb-fts-finish-20261030/source",
+      "-B",
+      "/var/tmp/seekdb-fts-finish-20261030/build",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DOB_CMAKE_RULES_CHECK=OFF"
+    ]
+  },
+  {
+    "name": "build-submitted",
+    "exit_code": 0,
+    "elapsed_sec": 982.0212886260006,
+    "command": [
+      "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+      "--build",
+      "/var/tmp/seekdb-fts-finish-20261030/build",
+      "--target",
+      "seekdb",
+      "oceanbase",
+      "-j",
+      "3"
+    ]
+  },
+  {
+    "name": "strip-submitted",
+    "exit_code": 0,
+    "elapsed_sec": 0.6171704220005267,
+    "command": [
+      "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-objcopy",
+      "--strip-debug",
+      "/var/tmp/seekdb-fts-finish-20261030/build/src/observer/seekdb",
+      "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-submitted"
+    ]
+  },
+  {
+    "name": "build-candidate",
+    "exit_code": 0,
+    "elapsed_sec": 42.66345055799957,
+    "command": [
+      "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/cmake",
+      "--build",
+      "/var/tmp/seekdb-fts-finish-20261030/build",
+      "--target",
+      "seekdb",
+      "oceanbase",
+      "-j",
+      "3"
+    ]
+  },
+  {
+    "name": "strip-candidate",
+    "exit_code": 0,
+    "elapsed_sec": 0.8025437280002734,
+    "command": [
+      "/var/tmp/codex-seekdb-native-12cd8fd/source/deps/3rd/usr/local/oceanbase/devtools/bin/llvm-objcopy",
+      "--strip-debug",
+      "/var/tmp/seekdb-fts-finish-20261030/build/src/observer/seekdb",
+      "/var/tmp/seekdb-fts-finish-20261030/bin/seekdb-candidate"
+    ]
+  },
+  {
+    "name": "cpp-final",
+    "exit_code": 0,
+    "elapsed_sec": 8.42485068499991,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/unittest/storage/fts/run_fts_cpp.py",
+      "--build-dir",
+      "/var/tmp/seekdb-fts-finish-20261030/build",
+      "--output",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/cpp-final"
+    ]
+  }
+]

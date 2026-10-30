@@ -1,0 +1,7 @@
+PASS character classification: 3336192 scalar/encoding pairs + malformed inputs
+PASS result-cell lifetime with a freeing allocator
+PASS chain lookup: empty, inline capacity boundaries, spill, reverse token insertion, both modes
+PASS beng token lifetime, normalization, repeated words and 4096-byte tokens
+PASS range dictionaries: destruction, capacity boundaries and allocation failures
+PASS one-pass word frequency updates: collisions, grouped frequencies and collations
+PASS stopword equivalence: 121140 comparisons across six collations, lifecycle and fallback

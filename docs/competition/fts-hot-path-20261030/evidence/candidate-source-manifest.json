@@ -1,0 +1,6 @@
+{
+  "src/storage/fts/ob_fts_stop_word.cpp": "ff7ced55d711bd72c25859f70133e0173f5888f86388d619d310410ace599050",
+  "src/storage/fts/ob_fts_stop_word.h": "819a5432c671e748287d124daa99870d087275f6f5dcbcb67748464e76bb44f1",
+  "unittest/storage/fts/test_fts_hot_path.cpp": "d34af39d893d8162b7858a5d4fbdf1b858b454817d439e06c3dad7617b9d8070",
+  "unittest/storage/fts/README.md": "280197ef69e4bdc403e622a3539fd707dc7cf40d518a3f1842af66d570963bb2"
+}

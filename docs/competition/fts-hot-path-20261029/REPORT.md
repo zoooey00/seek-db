@@ -1,5 +1,7 @@
 # IK / BENG 分词优化与验证报告
 
+最新续作及最终验证见 [2026-10-30 报告](../fts-hot-path-20261030/REPORT.md)。本文保留为前一版本的历史记录。
+
 日期：2026-10-29（Asia/Shanghai）。目标仓库：`zoooey00/seek-db`，分支：`perf/fts-ik-beng-20261029`。
 
 ## 结论与限制

@@ -1,0 +1,9 @@
+{
+  "binary_sha256": "a240b24b3c79d0b472b8476f45e40e2533bd40f60cefde65128354fcd50f0d17",
+  "cpu_set": "12,14",
+  "client_cpu": "10",
+  "memory_limit": "2G",
+  "thread_masks": {
+    "12,14": 66
+  }
+}

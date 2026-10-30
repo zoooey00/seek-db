@@ -83,9 +83,13 @@ public:
 private:
   static const int64_t DEFAULT_STOPWORD_BUCKET_NUM = 37L;
   typedef common::hash::ObHashSet<storage::ObFTWord> StopWordSet;
+  static bool make_ascii_key(const common::ObString &word, uint64_t &key);
 
   StopWordSet stopword_set_;
   ObObjMeta stopword_type_;
+  // Built from the same stopword list during init; read-only after publication.
+  uint64_t ascii_keys_[DEFAULT_STOPWORD_BUCKET_NUM] = {};
+  int64_t ascii_key_count_ = 0;
 
   bool inited_ = false;
 

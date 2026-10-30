@@ -1,0 +1,94 @@
+[
+  {
+    "name": "controlled-submitted-1",
+    "exit_code": 0,
+    "elapsed_sec": 40.70399557699966,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "controlled-submitted-1-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.07432615700054157,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/controlled-submitted-1.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "controlled-candidate-1",
+    "exit_code": 0,
+    "elapsed_sec": 29.76216678899982,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "controlled-candidate-1-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.05180455099980463,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/controlled-candidate-1.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "controlled-candidate-2",
+    "exit_code": 0,
+    "elapsed_sec": 27.95606991599925,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "controlled-candidate-2-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.049602483999478864,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/controlled-candidate-2.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "controlled-submitted-2",
+    "exit_code": 0,
+    "elapsed_sec": 32.775009282999235,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "controlled-submitted-2-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.0591181140007393,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/controlled-submitted-2.txt",
+      "--json"
+    ]
+  }
+]

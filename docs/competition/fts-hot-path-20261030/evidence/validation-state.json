@@ -1,0 +1,233 @@
+[
+  {
+    "name": "submitted-1",
+    "exit_code": 0,
+    "elapsed_sec": 29.668229716000496,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "submitted-1-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.049217006999242585,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/submitted-1.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "submitted-sql-reference",
+    "exit_code": 0,
+    "elapsed_sec": 4.433332085000075,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/unittest/storage/fts/check_fts_sql.py",
+      "--mysql",
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/obclient",
+      "--port",
+      "2901",
+      "--benchmark-results",
+      "--write",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/fresh-reference.json",
+      "--output",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/submitted-sql-reference"
+    ]
+  },
+  {
+    "name": "candidate-1",
+    "exit_code": 0,
+    "elapsed_sec": 58.29046912599915,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "candidate-1-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.07472619600048347,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/candidate-1.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "candidate-sql-compare",
+    "exit_code": 0,
+    "elapsed_sec": 8.613482261000172,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/unittest/storage/fts/check_fts_sql.py",
+      "--mysql",
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/obclient",
+      "--port",
+      "2901",
+      "--benchmark-results",
+      "--compare",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/fresh-reference.json",
+      "--output",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/candidate-sql-compare"
+    ]
+  },
+  {
+    "name": "candidate-2",
+    "exit_code": 0,
+    "elapsed_sec": 64.08702583400009,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "candidate-2-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.06939223900008074,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/candidate-2.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "submitted-2",
+    "exit_code": 0,
+    "elapsed_sec": 28.00189875900105,
+    "command": [
+      "taskset",
+      "-c",
+      "10",
+      "bash",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench.sh"
+    ]
+  },
+  {
+    "name": "submitted-2-score",
+    "exit_code": 0,
+    "elapsed_sec": 0.05443633799950476,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/tools/benchmark/fts_large_bench_score.py",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/submitted-2.txt",
+      "--json"
+    ]
+  },
+  {
+    "name": "candidate-old-index-compare",
+    "exit_code": 0,
+    "elapsed_sec": 4.6120483329996205,
+    "command": [
+      "python3",
+      "/var/tmp/seekdb-fts-finish-20261030/source/unittest/storage/fts/check_fts_sql.py",
+      "--mysql",
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/obclient",
+      "--port",
+      "2901",
+      "--benchmark-results",
+      "--compare",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/fresh-reference.json",
+      "--output",
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/candidate-old-index-compare"
+    ]
+  },
+  {
+    "name": "mysqltest-tokenize_function",
+    "exit_code": 0,
+    "elapsed_sec": 0.31403461399895605,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/t/tokenize_function.test",
+      "--result-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/tokenize_function.result",
+      "--logdir=/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation",
+      "--tmpdir=/var/tmp/seekdb-fts-finish-20261030"
+    ]
+  },
+  {
+    "name": "mysqltest-parser_properties",
+    "exit_code": 0,
+    "elapsed_sec": 1.4684463020003022,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/parser_properties.wrapper.test",
+      "--result-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/parser_properties.result",
+      "--logdir=/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation",
+      "--tmpdir=/var/tmp/seekdb-fts-finish-20261030"
+    ]
+  },
+  {
+    "name": "mysqltest-parser_hot_path",
+    "exit_code": 0,
+    "elapsed_sec": 1.9766095119994134,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/t/parser_hot_path.test",
+      "--result-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/parser_hot_path.result",
+      "--logdir=/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation",
+      "--tmpdir=/var/tmp/seekdb-fts-finish-20261030"
+    ]
+  },
+  {
+    "name": "mysqltest-simple_query",
+    "exit_code": 0,
+    "elapsed_sec": 1.5897624389999692,
+    "command": [
+      "/mnt/d/codex11/2026-10-28/new-chat/work/mysqltest/u01/obclient/bin/mysqltest",
+      "--no-defaults",
+      "--protocol=tcp",
+      "--host=127.0.0.1",
+      "--port=2901",
+      "--user=root",
+      "--database=oceanbase",
+      "--default-character-set=utf8mb4",
+      "--test-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/t/simple_query.test",
+      "--result-file=/var/tmp/seekdb-fts-finish-20261030/source/tools/deploy/mysql_test/test_suite/fts_index/r/mysql/simple_query.result",
+      "--logdir=/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation",
+      "--tmpdir=/var/tmp/seekdb-fts-finish-20261030"
+    ]
+  },
+  {
+    "name": "full-build-stopword-microbenchmark",
+    "exit_code": 0,
+    "elapsed_sec": 3.9146918329988694,
+    "command": [
+      "/mnt/c/Users/\u8d75\u7f8e\u9f99/Documents/Codex/2026-10-30/https-open-oceanbase-com-train-testrecord/outputs/seekdb-fts-final/validation/cpp-final/test_fts_hot_path",
+      "--benchmark-stopwords"
+    ]
+  }
+]

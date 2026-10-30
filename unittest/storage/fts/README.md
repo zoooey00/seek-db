@@ -10,6 +10,19 @@ IK list-cell lifetimes with a freeing allocator, arbitration at inline-array
 capacity boundaries, BENG token ownership across reset/destruction, and dictionary
 cleanup when each allocation fails in turn.
 
+The suite also compares stopword matching with an independent implementation
+of the original charset-conversion and hash-set path: 121,140 comparisons across
+six collations cover ASCII case combinations, trailing spaces, embedded NUL,
+malformed bytes, non-ASCII fallback and deterministic arbitrary ASCII strings.
+It checks initialization, destruction and reinitialization, plus frequency
+updates under collisions and binary/case-insensitive collations.
+
+After compiling the test executable, `--test-stopwords` runs just the stopword
+and frequency checks. `--benchmark-stopwords` measures thread CPU time in ABBA
+order for ASCII hits, ASCII misses and fallback inputs separately; it checks
+that hit counts agree. `--benchmark-word-map` measures the frequency update.
+These operation-level measurements do not measure complete SQL query latency.
+
 Build this checkout with `CMAKE_EXPORT_COMPILE_COMMANDS=ON`, including the
 `seekdb` and `oceanbase` targets, then run:
 
