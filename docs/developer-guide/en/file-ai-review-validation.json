@@ -1,0 +1,136 @@
+{
+  "validated_at": "2026-10-30T02:02:07.379509+00:00",
+  "build_exit_code": 0,
+  "binary_sha256": "7b5fc93beec8c827dd166792ee990764226d57578dfd765e3078a989b288b4f8",
+  "ai_boundary_regressions": {
+    "passed": 19,
+    "total": 19
+  },
+  "file_boundary_regressions": {
+    "passed": 6,
+    "total": 6
+  },
+  "ai_column_integration_tests": {
+    "passed": 11,
+    "total": 11
+  },
+  "official_ai_column_cases": 5,
+  "restart_recovery": true,
+  "file_sql_regressions": {
+    "passed": 41,
+    "total": 41
+  },
+  "delivery_regressions": {
+    "passed": 4,
+    "total": 4
+  },
+  "official_file_sql": true,
+  "file_native_units": true,
+  "ai_function_mysqltests": 2,
+  "platform_failure_cause_confirmed": false,
+  "full_hidden_test_pass_guaranteed": false,
+  "gateway_performance_evaluation_performed": false,
+  "stages": [
+    {
+      "name": "file-boundaries",
+      "exit_code": 0,
+      "log": "file-boundaries.log"
+    },
+    {
+      "name": "ai-boundaries",
+      "exit_code": 0,
+      "log": "ai-boundaries.log"
+    },
+    {
+      "name": "ai-official",
+      "exit_code": 0,
+      "log": "ai-official.log"
+    },
+    {
+      "name": "ai-integration",
+      "exit_code": 0,
+      "log": "ai-integration.log"
+    },
+    {
+      "name": "restart-recovery",
+      "exit_code": 0,
+      "log": "restart-recovery.log"
+    },
+    {
+      "name": "file-sql",
+      "exit_code": 0,
+      "log": "file-sql.log"
+    },
+    {
+      "name": "file-official",
+      "exit_code": 0,
+      "log": "file-official.log"
+    },
+    {
+      "name": "delivery",
+      "exit_code": 0,
+      "log": "delivery.log"
+    },
+    {
+      "name": "ai-functions",
+      "exit_code": 0,
+      "log": "ai-functions.log"
+    },
+    {
+      "name": "file-native-units",
+      "exit_code": 0,
+      "log": "units/run.log"
+    }
+  ],
+  "source_sha256": {
+    "src/observer/ob_server.cpp": "a0ba2ef8e08b77548e7fca1e2ec96c3369c1a193113030e6f69b43fc8108d1e6",
+    "src/pl/ob_pl_resolver.cpp": "df160b16bf46b6876e69d0790bef4aed51d4b1b019d5b2e57cd3f9c3be02fff9",
+    "src/share/ob_errno.cpp": "d31b71d29623047306c15039b3d9e76008b2a23f123c4e93a77f5f59c535a5b1",
+    "src/share/ob_errno.def": "fe5ce44e280b939d3a96cc5ccb63efe98ed9cd06a379c2345604c568ca525746",
+    "src/share/ob_errno.h": "966d1a5630087b336e56ca1548f4ecb9ce40b05413b195a6acd80c4cdbcd79b0",
+    "src/share/system_variable/ob_sys_var_class_type.h": "c452bf65a3b510fe540f1979442a7ce286b69763a74779d43a7e23c5cda02699",
+    "src/share/system_variable/ob_sys_var_meta.cpp": "4e5e40a07b5d16d548922f517f257c275521e0139b4492a01b3ac00f1507c62f",
+    "src/share/system_variable/ob_sys_var_meta.h": "7877f54993267d67f23326791b7a91bda24c0f1c78a6a39ed8edd6c549af8f94",
+    "src/share/system_variable/ob_system_variable_alias.h": "2a01b3469c4802d4b39dd8884958a459b024974931ac0d3cd2d20962c458b169",
+    "src/share/system_variable/ob_system_variable_init.cpp": "b166b8a245addf6bcaa2a940d1ad8f30652dc826bbcc703104cab038f0eeda17",
+    "src/share/system_variable/ob_system_variable_init.json": "49ff27f7384247eb7d4f88f34da204524a82b91571fbd10d1e2e38feb24d5416",
+    "src/sql/code_generator/ob_dml_cg_service.cpp": "d7fe2e12620fefcc1acabc1a6306ceda20f4d03b85adb59dacea84aece64d4c8",
+    "src/sql/engine/cmd/ob_table_executor.cpp": "9ac0d42f411d620849e3739a4a158978c0cf352e3bd385911256ba77bd018607",
+    "src/sql/engine/expr/ob_expr_ai/ob_ai_func_utils.cpp": "b8c158af414296e5f690e8092871824bfed44bf601b29e58f5d24e2e8d1ad310",
+    "src/sql/ob_result_set.cpp": "caaf7f7d175c12a8f3c83141f90ce8838b5bffbc9a456d326bf63985f44823cb",
+    "src/sql/ob_sql.cpp": "ba057cfb0f7a44c647fe70ac3b72f953c2550dd265d871ecca62dbe60dc72941",
+    "src/sql/parser/sql_parser_mysql_mode.y": "949c6dce3b35fa55efc10ee8b25a9316114e77b141458637d920b63aff43ecf8",
+    "src/sql/resolver/ddl/ob_alter_table_resolver.cpp": "fbbe9c9231f6c68e87befabb71f54101d52c6aa7354701a60e2320b11d2b78cd",
+    "src/sql/resolver/ddl/ob_create_table_resolver.cpp": "f685139507c13ba2edf05dabe48eb54dbba9a8ff17075f8eb07a7b37b54d948b",
+    "src/sql/resolver/ddl/ob_ddl_resolver.cpp": "4f616f75df37e5f2e8a5eb01e31090d5d4b3548409d93bbb54626747d0528cdc",
+    "src/sql/resolver/ob_resolver.cpp": "3402e02f345628122515777d64057a883e92f1f88f1a894846fbccee6276a85d",
+    "src/sql/resolver/ob_resolver.h": "99c6897e0a53acfa77ca34015888d4c64a173670de0b5f762b902906ed38620e",
+    "src/sql/resolver/ob_resolver_define.h": "84e4b071e9ca97eeadda89ae43701485bf62780835877f62e66731ba48033c31",
+    "src/sql/resolver/ob_stmt_resolver.cpp": "58c640098173feb3a86abfc43958efc814967ebf5d390d5c5fb397c45f74d950",
+    "src/sql/session/ob_system_variable_factory.cpp": "7cfc7860ca25e3ad35622603f0869075085b49c80b85035ca1d6f4f2800e6afe",
+    "src/sql/session/ob_system_variable_factory.h": "55fec8f2115e230f423f24b089f52599927883de61dc2de4954897c93d00495e",
+    "src/sql/sql_source_inventory.bzl": "a0c8cc0fb49cf8e97342f6aa37dca9e5a5b7032c602e819dab16337b8124ad05",
+    "docs/developer-guide/en/ai-column.md": "adb10a80de1c4f03c2463c3a024cf315de8e8287fba6aa6e09cbe6f6644612ce",
+    "src/sql/ai_column/ai_column.h": "290baa44e123397cb8b66c71e01887cba46e2cea559065a9cfbcfd9684dc43e6",
+    "src/sql/ai_column/ai_column_checks.cpp": "da66664a6380df49d0dcc1f8d870836d7942ac336243d127d54ba72f7591b84d",
+    "src/sql/ai_column/ai_column_commands.cpp": "a45c54ddb8298c53d1d92ab0abec8729516a0105040bb3e530b21fd4c5b77978",
+    "src/sql/ai_column/ai_column_definition.cpp": "0c5b9c1e4a7deaaa04b147f33934b9c6d5f243014631bf6ab8c77dcc52339b14",
+    "src/sql/ai_column/ai_column_runtime.cpp": "e64ad9a4dc1ffe9e4023e1739da34f73689d758ab0e8931afb8e64726da19af1",
+    "unittest/sql/engine/expr/test_ai_column_integration.py": "6e1a929c31a32e97cfb2dbc5ea8d5e6569522515eff3ad7143230cffc8fde386",
+    "src/sql/das/ob_das_dml_vec_iter.cpp": "3ed5aba044f9c6a63a7edd14755295ef2ab6baf47a3d03216f49e13901c2e165",
+    "src/sql/resolver/dml/ob_del_upd_resolver.cpp": "1926260506a99e254d2305bd4f2ed82da74204c3587b26f1a2650bfb0c09e21d",
+    ".github/script/seekdb/scripts/farm_compile.sh": "f4cbd693f267dcd0edf67cd6765594a0676ad139a59abe424009b1ea29a57b67",
+    "package/deb/seekdb-build.sh": "9aed9d38ba3159a7433f51e0b4563655e32361856f01a48283ca2cceed8bb4f4",
+    "src/sql/CMakeLists.txt": "a616b30f1a7c1c48ba49fa10637a8ae914e2e7d842abf6da3d561571c045ed97",
+    "src/sql/resolver/dml/file_sql_commands.cpp": "2926b6e61d507519e9b360dd48349f8fea6d30e4db8e81269b582588def9120f",
+    "unittest/sql/engine/basic/test_file_sql_integration.py": "b1b31094cfee5c198cd155dede557879fa5d165f3e0e69fb560e2d8c7c51d00c",
+    "unittest/sql/engine/basic/test_file_sql_delivery.py": "6424830f5c220eae61ef95200301133c9f422ea1f75ad81753480c04e20a74ff",
+    "src/sql/engine/dml/ob_trigger_handler.cpp": "059555dfa4db6d130cc5d2c2c29967cccb90dfbc9367375e2534ebf48e64e9c6",
+    "src/sql/engine/dml/ob_trigger_handler.h": "f828789739806cc6d6a948745ee18dd57dbdeb408252900c4166452b5bbd106f",
+    "src/sql/resolver/ddl/ob_trigger_resolver.cpp": "cdbac80f997ed1117d1d73fa27cbc966d858e3a79017561950cd79d7895ced46",
+    "unittest/sql/engine/expr/test_ai_column_edge_cases.py": "36d60b7483e18cff7c44ad172149d2e36019dd44ccc1a72b112c87d1fa0f2335",
+    "src/sql/engine/basic/file_scan_utils.cpp": "aa98ae14dd6c3bb0f1fb2f94f5082f8369b30fa57d28f2b916c3c1e3529e5d0a",
+    "unittest/sql/engine/basic/test_file_sql_edge_cases.py": "cba37b827cd4218b2648eaed56058039cb41a745c1df8298bf082af7d02e816d",
+    "unittest/sql/engine/basic/test_file_scan_utils.cpp": "b6c057b6b4ce7c14a5929d95bbdc8bd9a05f915647ae55635a901a06fcf0f95d"
+  }
+}

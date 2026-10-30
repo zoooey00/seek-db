@@ -214,11 +214,19 @@ public:
     if(!current||current->is_in_recyclebin()) {
       return write(*proxy,"DELETE FROM "+std::string(TASK)+" WHERE table_id="+groups[0][0]);
     }
+    // Task ownership follows the immutable table ID across RENAME TABLE.
+    // Cached metadata names can lag a committed rename; resolve the live schema.
+    const ObDatabaseSchema *database=nullptr;
+    if((ret=schema_guard.get_database_schema(current->get_database_id(),database))!=OB_SUCCESS)return ret;
+    if(!database)return OB_ERR_UNEXPECTED;
+    const std::string db_name=string(database->get_database_name_str());
+    const std::string table_name=string(current->get_table_name_str());
+    if((ret=write(*proxy,"UPDATE "+std::string(META)+" SET database_name="+literal(db_name)+",table_name="+literal(table_name)+" WHERE table_id="+groups[0][0]+" AND (database_name<>"+literal(db_name)+" OR table_name<>"+literal(table_name)+")"))!=OB_SUCCESS)return ret;
     ObMySQLTransaction transaction;if((ret=transaction.start(proxy))!=OB_SUCCESS)return ret;
     std::string where="t.table_id="+groups[0][0]+" AND t.request_id="+literal(groups[0][1]);Rows rows;
     ret=read(transaction,"SELECT a.database_name,a.table_name,a.column_name,CAST(t.column_id AS CHAR),t.rowkey_predicate,t.request_id,t.definition_version,CAST(t.state AS CHAR),IFNULL(t.result_sql,'NULL'),a.definition_version FROM "+std::string(TASK)+" t JOIN "+META+" a ON a.table_id=t.table_id AND a.column_id=t.column_id WHERE "+where+" ORDER BY t.column_id FOR UPDATE",10,rows);
     if(ret==OB_SUCCESS&&!rows.empty()){
-      std::string update="UPDATE "+identifier(rows[0][0])+"."+identifier(rows[0][1])+" SET ",predicate;
+      std::string update="UPDATE "+identifier(db_name)+"."+identifier(table_name)+" SET ",predicate;
       for(size_t i=0;i<rows.size();++i){const auto&r=rows[i];if(atoi(r[7].c_str())<4){ret=OB_EAGAIN;break;}
         uint64_t col=strtoull(r[3].c_str(),nullptr,10);std::string req=identifier(request_name(col)),spec=identifier(spec_name(col)),name=identifier(r[2]),state=identifier(state_name(col));
         std::string valid=req+"="+literal(r[5])+" AND "+spec+"="+literal(r[6]);if(r[6]!=r[9])valid="FALSE";
@@ -227,7 +235,8 @@ public:
       }
       if(ret==OB_SUCCESS)ret=write(transaction,update+" WHERE ("+rows[0][4]+") AND ("+predicate+")");
     }
-    if(ret==OB_TABLE_NOT_EXIST||ret==OB_ERR_BAD_DATABASE)ret=OB_SUCCESS;
+    // A concurrent rename may invalidate these names after schema lookup.
+    // Keep the completed task and retry with a fresh schema instead of deleting it.
     if(ret==OB_SUCCESS)ret=write(transaction,"DELETE FROM "+std::string(TASK)+" WHERE table_id="+groups[0][0]+" AND request_id="+literal(groups[0][1]));
     std::string error="Result publication failed: "+std::to_string(ret);
     if(ret!=OB_SUCCESS) {

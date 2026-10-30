@@ -213,6 +213,63 @@ class AIColumnEdgeCases(existing.AIColumnIntegration):
             'WHERE a.database_name=%s', (self.db,)))
 
 
+    def test_business_trigger_dependency_update_regenerates(self):
+        self.create(extra=',note INT')
+        self.q("INSERT INTO docs(id,content,note) VALUES(1,'before',0)")
+        self.wait('SELECT result FROM docs', (('reply:before',),))
+        self.q("CREATE TRIGGER rewrite_input BEFORE UPDATE ON docs FOR EACH ROW BEGIN IF NEW.note=1 THEN SET NEW.content='after'; END IF; END")
+        self.q('UPDATE docs SET note=1 WHERE id=1')
+        self.wait('SELECT content,result FROM docs', (('after', 'reply:after'),))
+
+    def test_business_trigger_dependency_update_rolls_back(self):
+        self.create(extra=',note INT')
+        self.q("INSERT INTO docs(id,content,note) VALUES(1,'original',0)")
+        self.wait('SELECT result FROM docs', (('reply:original',),))
+        marker = 'rolled-back-trigger:' + uuid.uuid4().hex
+        self.q('CREATE TRIGGER rewrite_input BEFORE UPDATE ON docs FOR EACH ROW SET NEW.content=%s', (marker,))
+        self.q('START TRANSACTION')
+        self.q('UPDATE docs SET note=1 WHERE id=1')
+        self.assertEqual(((marker, None),), self.q('SELECT content,result FROM docs'))
+        self.q('ROLLBACK')
+        time.sleep(0.3)
+        self.assertNotIn(marker, self.events)
+        self.assertEqual((('original', 'reply:original'),), self.q('SELECT content,result FROM docs'))
+
+    def test_business_trigger_reverting_dependency_avoids_regeneration(self):
+        self.create()
+        self.q("INSERT INTO docs(id,content) VALUES(1,'same')")
+        self.wait('SELECT result FROM docs', (('reply:same',),))
+        self.q('CREATE TRIGGER preserve_input BEFORE UPDATE ON docs FOR EACH ROW SET NEW.content=OLD.content')
+        calls = len(self.events)
+        self.q("UPDATE docs SET content='discarded' WHERE id=1")
+        self.assertEqual((('same', 'reply:same'),), self.q('SELECT content,result FROM docs'))
+        time.sleep(0.3)
+        self.assertEqual(calls, len(self.events))
+
+    def test_renamed_ai_table_accepts_updates_and_manual_retry(self):
+        self.create()
+        self.q("INSERT INTO docs(id,content) VALUES(1,'before-rename')")
+        self.wait('SELECT result FROM docs', (('reply:before-rename',),))
+        self.q('RENAME TABLE docs TO renamed')
+        self.q("UPDATE renamed SET content='after-rename' WHERE id=1")
+        self.wait('SELECT result FROM renamed', (('reply:after-rename',),))
+        self.q('ALTER TABLE renamed RETRY AI COLUMN result WHERE id=1')
+        self.wait('SELECT result FROM renamed', (('reply:after-rename',),))
+        self.assertEqual((('renamed',),), self.q(
+            'SELECT table_name FROM oceanbase.__all_ai_column WHERE database_name=%s', (self.db,)))
+
+    def test_rename_during_model_call_publishes_to_same_table_id(self):
+        self.create()
+        marker = 'slow-old:' + uuid.uuid4().hex
+        self.q('INSERT INTO docs(id,content) VALUES(1,%s)', (marker,))
+        self.wait_for_call(marker)
+        self.q('RENAME TABLE docs TO renamed')
+        self.q('CREATE TABLE docs(id BIGINT PRIMARY KEY,content VARCHAR(200),result VARCHAR(200))')
+        self.q("INSERT INTO docs VALUES(1,'replacement','untouched')")
+        self.wait('SELECT result FROM renamed', (('reply:' + marker,),))
+        self.assertEqual((('untouched',),), self.q('SELECT result FROM docs'))
+
+
 if __name__ == '__main__':
     names = [name for name in AIColumnEdgeCases.__dict__ if name.startswith('test_')]
     suite = unittest.TestSuite(AIColumnEdgeCases(name) for name in sorted(names))

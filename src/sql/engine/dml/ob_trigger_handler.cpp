@@ -622,7 +622,20 @@ int TriggerHandle::do_handle_before_row(
         K(trig_ctdef.all_tm_points_.has_before_point()),
         K(trig_ctdef.all_tm_points_.has_after_point()));
       OV (OB_NOT_NULL(my_session));
-      for (int64_t i = 0; OB_SUCC(ret) && i < trig_ctdef.tg_args_.count(); i++) {
+      // Finalize AI invalidation after business BEFORE triggers have produced
+      // the final NEW dependency values. Preserve business-trigger ordering.
+      using BeforeTrigger = std::pair<int64_t,const ObTableSchema*>;
+      std::vector<BeforeTrigger> ordered, internal;
+      for(int64_t i=0;OB_SUCC(ret)&&i<trig_ctdef.tg_args_.count();++i){
+        const auto &arg=trig_ctdef.tg_args_.at(i);
+        if(!arg.has_before_row_point()||!arg.has_trigger_events(tg_event))continue;
+        const ObTableSchema *schema=nullptr;bool ai_before=false;
+        if(OB_FAIL(ai_column::protected_trigger_table(dml_op.get_exec_ctx(),arg.get_trigger_id(),schema,&ai_before))){}
+        else (ai_before?internal:ordered).emplace_back(i,schema);
+      }
+      ordered.insert(ordered.end(),internal.begin(),internal.end());
+      for (size_t ordinal=0;OB_SUCC(ret)&&ordinal<ordered.size();++ordinal) {
+        const int64_t i=ordered[ordinal].first;
         const ObTriggerArg &tg_arg = trig_ctdef.tg_args_.at(i);
         if (!tg_arg.has_before_row_point() || !tg_arg.has_trigger_events(tg_event)) {
           need_fire = false;
@@ -637,9 +650,8 @@ int TriggerHandle::do_handle_before_row(
             ret = OB_NOT_INIT;
           } else {
             const ObTableModifySpec &modify_spec = static_cast<const ObTableModifySpec&>(dml_op.get_spec());
-            const ObTableSchema *protected_schema=nullptr;
-            if (OB_FAIL(ai_column::protected_trigger_table(dml_op.get_exec_ctx(),tg_arg.get_trigger_id(),protected_schema))) {
-            } else if (OB_FAIL(calc_before_row(dml_op, trig_rtdef, tg_arg.get_trigger_id()))) {
+            const ObTableSchema *protected_schema=ordered[ordinal].second;
+            if (OB_FAIL(calc_before_row(dml_op, trig_rtdef, tg_arg.get_trigger_id()))) {
             } else if ((ObTriggerEvents::is_update_event(tg_event) ||
                   ObTriggerEvents::is_insert_event(tg_event))) {
                 if (OB_FAIL(check_and_update_new_row(&dml_op,

@@ -35,7 +35,7 @@ TEST_F(FileScanTest, CsvMultilineUnicodeDuplicatesAndNull){
   Spec s=schema("data.csv","\xef\xbb\xbfid,name,id,empty\r\n1,\"中文,\r\ntext\",2,\r\n3,\"say \"\"hi\"\"\",4,NULL\r\n");
   ASSERT_EQ(4U,s.columns.size());EXPECT_EQ("id__2",s.columns[2].name);EXPECT_EQ(Type::Null,s.columns[3].type);
   Reader reader;ASSERT_TRUE(reader.open(s,{0,1,2,3},error))<<error;bool end=false;std::vector<Cell> row;
-  ASSERT_TRUE(reader.next(row,end,error))<<error;ASSERT_FALSE(end);EXPECT_EQ("中文,\ntext",row[1].text);EXPECT_TRUE(row[3].null);
+  ASSERT_TRUE(reader.next(row,end,error))<<error;ASSERT_FALSE(end);EXPECT_EQ("中文,\r\ntext",row[1].text);EXPECT_TRUE(row[3].null);
   ASSERT_TRUE(reader.next(row,end,error))<<error;EXPECT_EQ("say \"hi\"",row[1].text);
   ASSERT_TRUE(reader.rescan(error));ASSERT_TRUE(reader.next(row,end,error));EXPECT_EQ("1",row[0].text);
 }

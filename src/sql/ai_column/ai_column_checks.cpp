@@ -53,15 +53,15 @@ int check_write(ObResolverParams &params,const ObDMLStmt &stmt) {
   }
   return OB_SUCCESS;
 }
-int protected_trigger_table(ObExecContext &ctx,uint64_t trigger_id,const ObTableSchema *&table) {
-  table=nullptr;
+int protected_trigger_table(ObExecContext &ctx,uint64_t trigger_id,const ObTableSchema *&table,bool *internal_before) {
+  table=nullptr;if(internal_before)*internal_before=false;
   if(!ctx.get_sql_ctx()||!ctx.get_sql_ctx()->schema_guard_)return OB_NOT_INIT;
   auto &guard=*ctx.get_sql_ctx()->schema_guard_;
   const ObTriggerInfo *trigger=nullptr;int ret=guard.get_trigger_info(trigger_id,trigger);
   if(ret!=OB_SUCCESS)return ret;if(!trigger)return OB_ERR_UNEXPECTED;
   const std::string name=string(trigger->get_trigger_name());
   const std::string owned="__seekdb_ai_"+std::to_string(trigger->get_base_object_id());
-  if(name==owned+"_bi"||name==owned+"_bu")return OB_SUCCESS;
+  if(name==owned+"_bi"||name==owned+"_bu"){if(internal_before)*internal_before=true;return OB_SUCCESS;}
   const ObTableSchema *schema=nullptr;
   if((ret=guard.get_table_schema(trigger->get_base_object_id(),schema))!=OB_SUCCESS)return ret;
   if(!schema)return OB_ERR_UNEXPECTED;

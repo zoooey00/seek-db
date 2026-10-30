@@ -17,6 +17,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <rapidjson/document.h>
+#include <rapidjson/reader.h>
+#include <rapidjson/memorystream.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
@@ -157,7 +159,7 @@ public:
       if(in_quote){
         if(c==spec.options.quote){int n=fgetc(file);if(n==spec.options.quote&&spec.options.escape==spec.options.quote)value+=c;else {in_quote=false;after_quote=true;if(n!=EOF)ungetc(n,file);}}
         else if(c==spec.options.escape&&spec.options.escape!=spec.options.quote){int n=fgetc(file);if(n==EOF)return fail(error,"Truncated CSV escape at line "+std::to_string(line));value+=static_cast<char>(n);}
-        else if(c=='\r'){int n=fgetc(file);if(n!='\n'&&n!=EOF)ungetc(n,file);value+='\n';++line;}
+        else if(c=='\r'){value+=c;int n=fgetc(file);if(n=='\n'){value+='\n';++bytes;}else if(n!=EOF)ungetc(n,file);++line;}
         else {value+=c;if(c=='\n')++line;}
       }else if(c==spec.options.delimiter){push();if(row.size()>=MAX_COLUMNS)return fail(error,"CSV has too many columns");}
       else if(c=='\n'||c=='\r'){if(c=='\r'){int n=fgetc(file);if(n!='\n'&&n!=EOF)ungetc(n,file);}++line;push();break;}
@@ -178,18 +180,42 @@ public:
       if(first){first=false;if(text.compare(0,3,"\xef\xbb\xbf")==0)text.erase(0,3);}
       if(text.find_first_not_of(" \t\r")!=std::string::npos)break;
     }
-    rapidjson::Document doc;doc.Parse<rapidjson::kParseValidateEncodingFlag>(text.data(),text.size());
-    if(doc.HasParseError()||!doc.IsObject())return fail(error,"Expected a flat JSON object at line "+std::to_string(line-(ch=='\n')));
-    if(doc.MemberCount()>MAX_COLUMNS)return fail(error,"JSONL has too many fields");std::set<std::string> names;
-    for(auto i=doc.MemberBegin();i!=doc.MemberEnd();++i){
-      std::string name(i->name.GetString(),i->name.GetStringLength());
-      if(name.empty()||!valid_utf8(name)||!names.insert(lower(name)).second)return fail(error,"Empty, invalid or duplicate JSONL field name at line "+std::to_string(line));
-      const auto &v=i->value;Cell c;c.null=v.IsNull();
-      if(v.IsObject()||v.IsArray())return fail(error,"Nested JSON objects and arrays are not supported at line "+std::to_string(line));
-      if(v.IsString()){c.text.assign(v.GetString(),v.GetStringLength());Type t=infer_type(c.text);c.type=(t==Type::Date||t==Type::Datetime)?t:Type::Varchar;}
-      else if(!c.null){c.text=json_text(v);c.type=v.IsBool()?Type::Boolean:v.IsInt64()?Type::Bigint:v.IsDouble()?Type::Double:Type::Varchar;}
-      if(!valid_utf8(c.text))return fail(error,"Invalid JSONL UTF-8 or NUL text");fields.emplace_back(name,std::move(c));
-    }return true;
+    // Preserve numeric tokens before any floating-point conversion. A column
+    // that widens to VARCHAR must retain integers outside the BIGINT range.
+    struct FlatObject : rapidjson::BaseReaderHandler<rapidjson::UTF8<>,FlatObject> {
+      std::vector<std::pair<std::string,Cell>> &fields;
+      std::set<std::string> names;
+      bool started=false,finished=false,expect_value=false;
+      std::string name;
+      explicit FlatObject(std::vector<std::pair<std::string,Cell>> &f):fields(f){}
+      bool StartObject(){if(started)return false;started=true;return true;}
+      bool EndObject(rapidjson::SizeType){if(!started||expect_value)return false;finished=true;return true;}
+      bool StartArray(){return false;}
+      bool Key(const char *s,rapidjson::SizeType n,bool){
+        if(!started||finished||expect_value||fields.size()>=MAX_COLUMNS)return false;
+        name.assign(s,n);
+        if(name.empty()||!valid_utf8(name)||!names.insert(lower(name)).second)return false;
+        expect_value=true;return true;
+      }
+      bool value(Cell cell){
+        if(!expect_value||!valid_utf8(cell.text))return false;
+        fields.emplace_back(name,std::move(cell));expect_value=false;return true;
+      }
+      bool Null(){return value(Cell());}
+      bool Bool(bool b){Cell c;c.null=false;c.type=Type::Boolean;c.text=b?"true":"false";return value(std::move(c));}
+      bool String(const char *s,rapidjson::SizeType n,bool){
+        Cell c;c.null=false;c.text.assign(s,n);Type t=infer_type(c.text);
+        c.type=(t==Type::Date||t==Type::Datetime)?t:Type::Varchar;return value(std::move(c));
+      }
+      bool RawNumber(const char *s,rapidjson::SizeType n,bool){
+        Cell c;c.null=false;c.text.assign(s,n);c.type=infer_type(c.text);return value(std::move(c));
+      }
+    } handler(fields);
+    rapidjson::Reader parser;rapidjson::MemoryStream stream(text.data(),text.size());
+    if(!parser.Parse<rapidjson::kParseValidateEncodingFlag|rapidjson::kParseNumbersAsStringsFlag>(stream,handler)
+        ||!handler.finished)
+      return fail(error,"Expected a flat JSON object with valid unique fields at line "+std::to_string(line-(ch=='\n')));
+    return true;
   }
 };
 Reader::Reader():impl_(new Impl){}

@@ -72,6 +72,17 @@ int ObSelectResolver::resolve_file_copy(const ParseNode&node,ObSelectIntoItem&it
   int ret=OB_SUCCESS;bool enabled=false;
   if(OB_FAIL(session_info_->get_sys_variable(share::SYS_VAR_ENABLE_FILE_SQL,enabled)))return ret;
   if(!enabled){ret=OB_NOT_SUPPORTED;LOG_USER_ERROR(OB_NOT_SUPPORTED,"COPY requires enable_file_sql=ON");return ret;}
+  // COPY stores paths/options/header metadata in its compiled descriptor.
+  // Keep different literal values from reusing a descriptor for another target.
+  if(params_.param_list_!=nullptr&&params_.param_list_->count()>0){
+    ObPCConstParamInfo constraints;
+    for(int64_t i=0;OB_SUCC(ret)&&i<params_.param_list_->count();++i){
+      if(OB_FAIL(constraints.const_idx_.push_back(i))){}
+      else if(OB_FAIL(constraints.const_params_.push_back(params_.param_list_->at(i)))){}
+    }
+    if(OB_SUCC(ret))ret=params_.query_ctx_->all_plan_const_param_constraints_.push_back(constraints);
+    if(OB_FAIL(ret))return ret;
+  }
   file_sql::Spec spec;spec.options.format="csv";spec.options.header=false;
   spec.input_path=text(node.children_[0]);spec.path=spec.input_path;
   const ParseNode*options=node.children_[1];std::set<std::string>seen;std::string error;
