@@ -18,11 +18,16 @@ target_link_options(seekdb_file_parquet PRIVATE
   -static-libstdc++ -static-libgcc
   -Wl,--exclude-libs,ALL -Wl,-Bsymbolic -Wl,--no-undefined
   -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/engine/basic/file_scan_parquet.map)
+# Standard dependency packages place zlib in lib; other supported layouts use
+# lib64. Resolve the static archive within the selected dependency prefix.
+find_library(SEEKDB_FILE_SQL_ZLIB NAMES libz.a
+  PATHS "${DEP_DIR}/lib" "${DEP_DIR}/lib64"
+  NO_DEFAULT_PATH REQUIRED)
 target_link_libraries(seekdb_file_parquet PRIVATE -Wl,--start-group
   ${DEP_DIR}/lib64/libparquet.a
   ${DEP_DIR}/lib64/libarrow.a
   ${DEP_DIR}/lib64/libarrow_bundled_dependencies.a
-  ${DEP_DIR}/lib64/libz.a
+  ${SEEKDB_FILE_SQL_ZLIB}
   -Wl,--end-group pthread dl)
 add_dependencies(ob_sql seekdb_file_parquet)
 # The decoder is loaded only after engine initialization, on the first Parquet

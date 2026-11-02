@@ -4,6 +4,7 @@ import io
 import tarfile
 import textwrap
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -21,6 +22,36 @@ class FileSqlDeliveryTest(unittest.TestCase):
 
     def tearDown(self):
         self.directory.cleanup()
+
+    def resolve_zlib(self, layout):
+        dependency = self.root / "dependencies"
+        if layout:
+            archive = dependency / layout / "libz.a"
+            archive.parent.mkdir(parents=True)
+            archive.write_bytes(b"archive-location-fixture")
+        source = (REPO / "src/sql/CMakeLists.txt").read_text()
+        block = re.search(r"find_library\(SEEKDB_FILE_SQL_ZLIB\b.*?\)", source, re.S)
+        self.assertIsNotNone(block, "Use the real dependency discovery block")
+        script = self.root / "resolve-zlib.cmake"
+        script.write_text('set(DEP_DIR "' + str(dependency) + '")\n' + block.group(0) +
+                          '\nmessage(STATUS "resolved=${SEEKDB_FILE_SQL_ZLIB}")\n')
+        return subprocess.run([os.environ.get("CMAKE", "cmake"), "-P", str(script)],
+                              capture_output=True, text=True), dependency
+
+    def test_zlib_standard_lib_layout(self):
+        result, dependency = self.resolve_zlib("lib")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn(str(dependency / "lib/libz.a"), result.stdout)
+
+    def test_zlib_lib64_layout(self):
+        result, dependency = self.resolve_zlib("lib64")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn(str(dependency / "lib64/libz.a"), result.stdout)
+
+    def test_zlib_missing_from_selected_dependencies(self):
+        result, _ = self.resolve_zlib(None)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("SEEKDB_FILE_SQL_ZLIB", result.stderr)
 
     def test_farm_default_uses_supported_release_mode(self):
         workspace = self.root / "workspace"
