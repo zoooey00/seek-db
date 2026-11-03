@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "case_count": 936,
+  "tokenize_cases": 536,
+  "match_cases": 396,
+  "benchmark_result_counts": {
+    "B:cn": 8001,
+    "B:beng": 11000,
+    "B:mixed": 7332,
+    "B:limit_full": 9333
+  },
+  "compared_full_results": true,
+  "different_cases": [],
+  "match_relevance_decimal_places": 10,
+  "snapshot_sha256": "b63aa4c1af4e937989dff039f887b38642277ba315fc827c5cf5e8ba206c82bb",
+  "sql_sha256": "590482e76a8efab0de29955630c9ef5219cda4a1090185542e6f8f2788874570"
+}

@@ -1,0 +1,47 @@
+{
+  "plan": [
+    {
+      "block": 1,
+      "position": 1,
+      "version": "submitted",
+      "label": "b1-p1-submitted"
+    },
+    {
+      "block": 1,
+      "position": 2,
+      "version": "candidate",
+      "label": "b1-p2-candidate"
+    },
+    {
+      "block": 2,
+      "position": 1,
+      "version": "candidate",
+      "label": "b2-p1-candidate"
+    },
+    {
+      "block": 2,
+      "position": 2,
+      "version": "submitted",
+      "label": "b2-p2-submitted"
+    }
+  ],
+  "parameters": {
+    "rows": 20000,
+    "batch": 500,
+    "rounds": 3000,
+    "query_rounds": 200,
+    "samples": 3,
+    "warmup": 30,
+    "skip_load": 0
+  },
+  "server_cpus": "12,14",
+  "client_cpu": "10",
+  "cpu_count": 2,
+  "memory_limit": "2G",
+  "fresh_empty_data_directory_every_run": true,
+  "startup_settle_seconds": 20,
+  "regression_between_runs": false,
+  "discard_outliers": false,
+  "subtract_select1": false,
+  "other_services_untouched": true
+}

@@ -20,8 +20,33 @@
 
 namespace oceanbase
 {
+namespace sql
+{
+int calc_bool_expr_for_double_type(const ObExpr &expr, ObEvalCtx &ctx, ObDatum &res_datum);
+}
 namespace storage
 {
+
+// Binary VARCHAR identifiers are compared byte-for-byte, including trailing
+// spaces. Choose this comparator once at initialization instead of resolving
+// the charset on every merge-heap comparison. Other types keep their comparator.
+static int compare_binary_sparse_ids(const ObDatum &left, const ObDatum &right,
+                                    int &cmp_ret, const ObDatumAccessContext *access_ctx)
+{
+  UNUSED(access_ctx);
+  if (left.is_null() || right.is_null()) {
+    cmp_ret = left.is_null() ? (right.is_null() ? 0 : -1) : 1;
+  } else {
+    const ObString l = left.get_string();
+    const ObString r = right.get_string();
+    const int64_t common_len = MIN(l.length(), r.length());
+    cmp_ret = common_len == 0 ? 0 : MEMCMP(l.ptr(), r.ptr(), common_len);
+    if (cmp_ret == 0) {
+      cmp_ret = l.length() - r.length();
+    }
+  }
+  return OB_SUCCESS;
+}
 
 ObSRMergeCmp::ObSRMergeCmp()
   : cmp_func_(nullptr),
@@ -40,7 +65,8 @@ int ObSRMergeCmp::init(
   } else {
     iter_ids_ = iter_ids;
     common::ObDatumBasicFuncs *basic_funcs = ObDatumFuncs::get_basic_func(id_meta.type_, id_meta.cs_type_);
-    cmp_func_ = basic_funcs->null_first_cmp_;
+    cmp_func_ = id_meta.type_ == ObVarcharType && id_meta.cs_type_ == CS_TYPE_BINARY
+        ? compare_binary_sparse_ids : basic_funcs->null_first_cmp_;
     if (OB_ISNULL(cmp_func_)) {
       ret = OB_ERR_UNEXPECTED;
     } else {
@@ -367,7 +393,16 @@ int ObSRDaaTIterImpl::filter_on_demand(const int64_t count, const double relevan
       relevance_proj_expr->set_evaluated_projected(*eval_ctx);
       ObDatum *filter_res = nullptr;
       filter_expr->clear_evaluated_flag(*eval_ctx);
-      if (OB_FAIL(filter_expr->eval(*eval_ctx, filter_res))) {
+      const bool is_direct_relevance_bool =
+          filter_expr->eval_func_ == sql::calc_bool_expr_for_double_type
+          && filter_expr->arg_cnt_ == 1
+          && filter_expr->args_[0] == relevance_proj_expr;
+      if (is_direct_relevance_bool) {
+        // The child was just projected as a non-null double. Use exactly the
+        // evaluator's zero comparison; leave the filter unevaluated so any
+        // other consumer can still evaluate it normally.
+        need_project = relevance != 0.0;
+      } else if (OB_FAIL(filter_expr->eval(*eval_ctx, filter_res))) {
       } else {
         need_project = !(filter_res->is_null() || 0 == filter_res->get_int());
       }

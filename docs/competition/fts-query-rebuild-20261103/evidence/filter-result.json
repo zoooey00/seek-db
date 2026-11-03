@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "cases": 21,
+  "comparison": "Full ordered ID and rounded relevance output, byte-for-byte",
+  "sha256": {
+    "submitted": "8047f380f0e5a0ff220b7c8b962c665b32b91d4b030f94fd6cb41e1561e3a7af",
+    "candidate": "8047f380f0e5a0ff220b7c8b962c665b32b91d4b030f94fd6cb41e1561e3a7af"
+  },
+  "bytes": {
+    "submitted": 3699793,
+    "candidate": 3699793
+  }
+}
