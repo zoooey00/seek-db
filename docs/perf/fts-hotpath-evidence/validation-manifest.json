@@ -1,0 +1,22 @@
+{
+  "base": "5bce9e06d1281347ad61344e4b01fab9158c58a2",
+  "binaries": {
+    "baseline": "c64e4cbd469295319c658637a760f461cbc79e245d908d5e1d2ff38a70f0986f",
+    "candidate": "638851f984ee5d7a9b9c527a77b67b7cc9c6f041bebdf4b652a6f4c5750c6325"
+  },
+  "sources": {
+    "src/storage/fts/ik/ob_ik_char_util.h": "6bf3d5a9e1af800ba6fa4d7c596b31ddc974016be8e0a532d3546a64a4d0fe9d",
+    "src/share/text_analysis/ob_token_stream.cpp": "983d1cd8e4ffacc04e767f9f712ba20a2c2dd9835e05173203b210e336da10e2"
+  },
+  "sql_output_sha256": {
+    "block1/1-baseline": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block1/2-candidate": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block1/3-candidate": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block1/4-baseline": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block2/1-baseline": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block2/2-candidate": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block2/3-candidate": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a",
+    "block2/4-baseline": "63077c004586c1a8aa1cd2beba8438460ab59caf36072875fe254632c4f38f6a"
+  },
+  "sql_cases_per_run": 591
+}

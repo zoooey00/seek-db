@@ -1,0 +1,14 @@
+PASS: 3945734 exact classification/result-code comparisons
+PASS: 604296 complete whitespace token streams
+classify_microseconds block=0 variant=reference elapsed=43914 checksum=6400000
+classify_microseconds block=0 variant=candidate elapsed=27675 checksum=6400000
+classify_microseconds block=1 variant=candidate elapsed=32574 checksum=6400000
+classify_microseconds block=1 variant=reference elapsed=39604 checksum=6400000
+classify_microseconds block=2 variant=reference elapsed=43204 checksum=6400000
+classify_microseconds block=2 variant=candidate elapsed=28923 checksum=6400000
+classify_microseconds block=3 variant=candidate elapsed=28034 checksum=6400000
+classify_microseconds block=3 variant=reference elapsed=40536 checksum=6400000
+classify_microseconds block=4 variant=reference elapsed=42351 checksum=6400000
+classify_microseconds block=4 variant=candidate elapsed=27191 checksum=6400000
+classify_microseconds block=5 variant=candidate elapsed=28255 checksum=6400000
+classify_microseconds block=5 variant=reference elapsed=39292 checksum=6400000
